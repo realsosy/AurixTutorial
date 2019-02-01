@@ -25,11 +25,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>org.eclipse.linuxtools.tmf.project.nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>0_Src/BaseSw</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/BaseSw</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
