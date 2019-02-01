@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>MyIlldModule_AK_TC23A</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.linuxtools.tmf.project.nature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>0_Src/AppSw</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MyApp/MyIlldModule/0_Src/AppSw</locationURI>
+		</link>
+		<link>
+			<name>0_Src/BaseSw</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/BaseSw</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
