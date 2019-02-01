@@ -167,7 +167,7 @@
 		</toolchain>
 	</architecture>
 	
-	<sourceFolder paths= "../MyApp/MyIlldModule/0_Src/AppSw, ../_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/, ../_LibSrc/simio_pls"/>
+	<sourceFolder paths= "../../MyApp/MyIlldModule/0_Src/AppSw, ../../_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/, ../../_LibSrc/simio_pls"/>
 
 	<selection>
 		<variant rootPaths="*/MyIlldModule" branches ="AsclinAsc"/>

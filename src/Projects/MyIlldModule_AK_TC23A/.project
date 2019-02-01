@@ -29,12 +29,12 @@
 		<link>
 			<name>0_Src/AppSw</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/MyApp/MyIlldModule/0_Src/AppSw</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/MyApp/MyIlldModule/0_Src/AppSw</locationURI>
 		</link>
 		<link>
 			<name>0_Src/BaseSw</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/BaseSw</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/BaseSw</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
