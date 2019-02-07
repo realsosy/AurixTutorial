@@ -1,3 +1,46 @@
+/src/Projects/BaseFramework_TC23A/3_Doc
+/src/Projects/BaseFramework_TC23A/2_Out/Tricore_Gnuc
+/src/Projects/BaseFramework_TC23A/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/BaseFramework_TC27D/3_Doc
+/src/Projects/BaseFramework_TC27D/2_Out/Tricore_Gnuc
+/src/Projects/BaseFramework_TC27D/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/_iLLDFramework_AK_TC23A/3_Doc
+/src/Projects/_iLLDFramework_AK_TC23A/2_Out/Tricore_Gnuc
+/src/Projects/_iLLDFramework_AK_TC23A/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/_iLLDFramework_SB_TC27D/3_Doc
+/src/Projects/_iLLDFramework_SB_TC27D/2_Out/Tricore_Gnuc
+/src/Projects/_iLLDFramework_SB_TC27D/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyPort_AK_TC23A/3_Doc
+/src/Projects/MyPort_AK_TC23A/2_Out/Tricore_Gnuc
+/src/Projects/MyPort_AK_TC23A/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyPort_SB_TC27D/3_Doc
+/src/Projects/MyPort_SB_TC27D/2_Out/Tricore_Gnuc
+/src/Projects/MyPort_SB_TC27D/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyStm_AK_TC23A/3_Doc
+/src/Projects/MyStm_AK_TC23A/2_Out/Tricore_Gnuc
+/src/Projects/MyStm_AK_TC23A/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyStm_SB_TC27D/3_Doc
+/src/Projects/MyStm_SB_TC27D/2_Out/Tricore_Gnuc
+/src/Projects/MyStm_SB_TC27D/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyIlldModule_AK_TC23A/3_Doc
+/src/Projects/MyIlldModule_AK_TC23A/2_Out/Tricore_Gnuc
+/src/Projects/MyIlldModule_AK_TC23A/1_ToolEnv/0_Build/9_Make
+
+/src/Projects/MyIlldModule_SB_TC27D/3_Doc
+/src/Projects/MyIlldModule_SB_TC27D/2_Out/Tricore_Gnuc
+/src/Projects/MyIlldModule_SB_TC27D/1_ToolEnv/0_Build/9_Make
+
+# ude report files
+__connection_failed_report*
+
 # Prerequisites
 *.d
 
@@ -51,5 +94,3 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# ude report files
-__connection_failed_report*
