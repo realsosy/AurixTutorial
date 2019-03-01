@@ -67,10 +67,10 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 9.  [Multi channel voltmeter](./MultiChannelVoltmeter.md)  Vadc Background Scan
 10.  [My own cheap oscilloscope](./MyOwnCheapOscilloscope.md)  Vadc Auto Scan + Serial Plot
 11.  [Line Scan Camera](./LineScanCamera.md) TSL1401
-12.  [Chronos ruler(수정중)](./ChronosRuler.md) GtmTomTimer + Beeper, Servo
-13.  [Synchronized PWM(수정중)](./SynchronizedPwm.md) GtmTomPwmHl + H-Bridge
-14.  [Where are you?(수정중)](./WhereAreYou.md) Gpt12 + Encoder
-15.  [TFT as modern Man-Machine Interface(중)](./TftAsModernMmi.md)
+12.  [Chronos ruler](./ChronosRuler.md) GtmTomTimer + Beeper, Servo
+13.  [Synchronized PWM](./SynchronizedPwm.md) GtmTomPwmHl + H-Bridge
+14.  [Where are you?](./WhereAreYou.md) Gpt12 + Encoder
+15.  [TFT as modern Man-Machine Interface(AK_TC23A Only)](./TftAsModernMmi.md)
 16.  [Simulink as a programming language](./SimulinkAsAProgrammingLanguage.md)
 
 ### etc
