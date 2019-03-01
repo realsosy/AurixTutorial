@@ -1,0 +1,31 @@
+site_name: AurixTutorial
+
+pages:
+- Home: 'index.md'
+- Dive into AURIX world:
+    - How to study AURIX?: HowToStudyAurix.md
+#    - How to use BIFACES?: HowToUseBIFACES.md
+    - What is iLLD?: WhatIsIlld.md
+    - Do me a favor?: DoMeAFavor.md
+    - Twinkle twinkle little star: TwinkleTwinkleLittleStar.md
+    - Multiple infinite loops: MultipleInfiniteLoops.md 
+    - Hello world: HelloWorld.md
+    - My own terminal: MyOwnTerminal.md
+    - Multi channel voltmeter: MultiChannelVoltmeter.md
+    - My own cheap oscilloscope: MyOwnCheapOscilloscope.md
+    - Line Scan Camera(Optional): LineScanCamera.md
+    - Chronos ruler: ChronosRuler.md
+    - Synchronized PWM: SynchronizedPwm.md
+    - Where are you?: WhereAreYou.md
+    - TFT as modern Man-Machine Interface (AK_TC23A only): TftAsModernMmi.md 
+    - Simulink as a programming language: SimulinkAsAProgrammingLanguage.md
+#    - OSEK-Certified ErikaOS & RT-Druid: OsekCertificedErikaOsRtDruid.md
+
+- References: 'References.md'
+
+theme: readthedocs
+
+extra_javascript:
+    - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+use_directory_urls: false
