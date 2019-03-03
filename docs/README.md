@@ -1,3 +1,3 @@
 # README
 
-[AurixTutorial](./index.md)
+jump to [AurixTutorial](./index.md)
