@@ -18,7 +18,7 @@ pages:
     - Synchronized PWM: SynchronizedPwm.md
     - Where are you?: WhereAreYou.md
     - TFT as modern Man-Machine Interface (AK_TC23A only): TftAsModernMmi.md 
-    - Simulink as a programming language: SimulinkAsAProgrammingLanguage.md
+#    - Simulink as a programming language: SimulinkAsAProgrammingLanguage.md
 #    - OSEK-Certified ErikaOS & RT-Druid: OsekCertificedErikaOsRtDruid.md
 
 - References: 'References.md'

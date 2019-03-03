@@ -71,7 +71,8 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 13.  [Synchronized PWM](./SynchronizedPwm.md) GtmTomPwmHl + H-Bridge
 14.  [Where are you?](./WhereAreYou.md) Gpt12 + Encoder
 15.  [TFT as modern Man-Machine Interface(AK_TC23A Only)](./TftAsModernMmi.md)
-16.  [Simulink as a programming language](./SimulinkAsAProgrammingLanguage.md)
+
+
 
 ### etc
 
