@@ -57,7 +57,6 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 * **How to stduy AURIX** 부터 **Twinkle twinkle little start** 까지는 순서대로 보셔야 합니다.  그 이후는 독립적으로 구성되어 있어서 순서에 관계없이 관심있는 챕터를 보시면 됩니다.
 
 1.  [How to study AURIX?](./HowToStudyAurix.md) MCU 학습 방법 제안
-2.  [How to use BIFACES? (작성중)](./HowToUseBIFACES.md)  eclipse, make, doxygen, graphviz
 3.  [What is iLLD?](./WhatIsIlld.md) PORT
 4.  [Do ma a favor?](./DoMeAFavor.md) Config, Init, ISR in iLLD
 5.  [Twinkle twinkle little star](./TwinkleTwinkleLittleStar.md)  STM
