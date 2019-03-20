@@ -98,7 +98,22 @@ iLLD - related
 ### Module Configuration
 
 * 시스템 타이머에 누적되는 Tick을 이용하여 주기적으로 LED를 제어하고자 한다.
-- 때문에 compare register를 이용해 특정 주기마다 인터럽트를 발생시킬 것이다.
+- 이를 위해 제어하고자 하는 LED와 연결된 IO port를 사용할수 있도록 해주고,
+- Compare register를 이용해 특정 주기마다 인터럽트를 발생시킬 것이다.
+
+* LED port 정의
+```c
+BOARD == SHIELD_BUDDY
+// in AppSw\Tricore\Cfg_Illd\Configuration.h
+#define LED_TICK					IfxPort_P33_3 // 사용할 IO port 정의
+```
+
+```c
+BOARD == APPLICATION_KIT_TC237
+// in AppSw\Tricore\Cfg_Illd\Configuration.h
+#define LED_TICK					IfxPort_P13_0 // 사용할 IO port 정의
+```
+
 
 ```c
 // in StmDemo.c
