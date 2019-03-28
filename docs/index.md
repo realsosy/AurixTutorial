@@ -27,8 +27,7 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 
 * /src 에 있는 프로젝트들은 다운로드 받으셔서 사용하셔도 됩니다.  사소한 오류는 있을 것으로 예상됩니다만 참고용으로 사용할 수 있을 수준의 코드입니다.
 * /docs 와 /references 에 있는 파일들은 인터넷을 사용하여 접근하시기 바랍니다. 수시로 지속적인 변경이 발생할 수 있으므로 다운로드 받지 마시고 browser나 git 을 통해서 접근하시기를 바랍니다.
-* 각 문서들은 상태에 따라서 (작성중), (수정중) 이라는 표시를 하여 참고하시는 분들의 불편을 최소화 하도록 하겠습니다.
-* (작성중) 표시가 없는 챕터들은 [ReadTheDocs](http://aurixtutorial.readthedocs.io/ko/latest/)에서 좀 더 편하게 보실 수 있습니다.
+* [ReadTheDocs](http://aurixtutorial.readthedocs.io/ko/latest/)에서 좀 더 편하게 보실 수 있습니다.
 
 
 
@@ -41,7 +40,7 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 
 ## What we need
 * [ShieldBuddy_TC275](http://www.hitex.co.uk/embedded-technology/hardware/boards-modules/embedded-modules-by-processor/hitex-shieldbuddy-tc275/) 또는  [ApplicationKit TC237](https://www.infineon.com/cms/en/product/evaluation-boards/kit_aurix_tc237_tft/): 조건부 컴파일로 활용 가능
-* [DC Motor Control Shield with BTN8982TA](https://www.infineon.com/cms/en/product/evaluation-boards/dc-motorcontr_btn8982/) 또는 **DC Motor Control Kit**(Infineon Released)
+* [DC Motor Control Shield with IFX007T](https://www.infineon.com/cms/en/product/evaluation-boards/bldc-shield_ifx007t/) 또는 **DC Motor Control Kit**(Infineon Released)
 - [**HighTec Free TriCore™ Entry Tool Chain V4.9.1.0-infineon-2.0 (later)**](https://free-entry-toolchain.hightec-edv.com/index.php): Compiler & Debugger
 - [**BIFACES_V1_0_2_Win32.exe**](https://drive.google.com/open?id=120INrMwqaR8812rFyFHspgbCLmoi7d-T) or [**BIFACES_V1_0_2_Win64.exe**](https://drive.google.com/open?id=1z80W66QcE_DNJBaRRdcr3tfRu9EoZ8Oz); Build and Integration Framework for Automotive Controller Embedded Software
 - [**BaseProjects_AURIX1G_V1_0_1_7_0.exe**](https://drive.google.com/open?id=1r6FEn1KDHO1Owxte6-Np0ksMG87OZAOt); BIFACES Base Template Project

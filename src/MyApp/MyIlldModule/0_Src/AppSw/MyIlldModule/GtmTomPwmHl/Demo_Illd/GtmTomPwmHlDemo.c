@@ -107,8 +107,8 @@ void GtmTomPwmHl_initTimer(void)
         timerConfig.triggerOut                      = &IfxGtm_TOM0_0_TOUT18_P00_9_OUT;
 #elif BOARD == SHIELD_BUDDY
         timerConfig.tom                             = IfxGtm_Tom_0;
-        timerConfig.timerChannel                    = IfxGtm_Tom_Ch_11;
-        timerConfig.triggerOut                      = &IfxGtm_TOM0_11_TOUT3_P02_3_OUT;
+        timerConfig.timerChannel                    = IfxGtm_Tom_Ch_0;
+        timerConfig.triggerOut                      = &IfxGtm_TOM0_0_TOUT77_P15_6_OUT;
 #endif
         timerConfig.base.trigger.outputEnabled      = TRUE;
         timerConfig.base.trigger.enabled            = TRUE;
@@ -119,19 +119,13 @@ void GtmTomPwmHl_initTimer(void)
 
         IfxGtm_Tom_PwmHl_initConfig(&pwmHlConfig);
 
-        IfxGtm_Tom_ToutMapP ccx[2], coutx[2];
 #if BOARD == APPLICATION_KIT_TC237
+        IfxGtm_Tom_ToutMapP ccx[2], coutx[2];
         ccx[0]   = &IfxGtm_TOM0_4_TOUT10_P00_1_OUT;
         coutx[0] = &IfxGtm_TOM0_5_TOUT11_P00_2_OUT;
         ccx[1]   = &IfxGtm_TOM0_6_TOUT14_P00_5_OUT;
         coutx[1] = &IfxGtm_TOM0_7_TOUT15_P00_6_OUT;
 
-#elif BOARD == SHIELD_BUDDY
-        ccx[0]   = &IfxGtm_TOM0_12_TOUT4_P02_4_OUT;
-        coutx[0] = &IfxGtm_TOM0_13_TOUT5_P02_5_OUT;
-        ccx[1]   = &IfxGtm_TOM0_14_TOUT6_P02_6_OUT;
-        coutx[1] = &IfxGtm_TOM0_15_TOUT7_P02_7_OUT;
-#endif
         pwmHlConfig.timer                 = &g_GtmTomPwmHl.drivers.timer;
         pwmHlConfig.tom                   = timerConfig.tom;
         pwmHlConfig.base.deadtime         = 2e-6;
@@ -144,6 +138,28 @@ void GtmTomPwmHl_initTimer(void)
         pwmHlConfig.base.coutxActiveState = Ifx_ActiveState_high;
         pwmHlConfig.ccx                   = ccx;
         pwmHlConfig.coutx                 = coutx;
+
+#elif BOARD == SHIELD_BUDDY
+        IfxGtm_Tom_ToutMapP ccx[2], coutx[2];
+        ccx[0]   = &IfxGtm_TOM0_3_TOUT105_P10_3_OUT;
+        coutx[0] = &IfxGtm_TOM0_4_TOUT22_P33_0_OUT;
+        ccx[1]   = &IfxGtm_TOM0_2_TOUT107_P10_5_OUT;
+        coutx[1] = &IfxGtm_TOM0_5_TOUT23_P33_1_OUT;
+
+        pwmHlConfig.timer                 = &g_GtmTomPwmHl.drivers.timer;
+        pwmHlConfig.tom                   = timerConfig.tom;
+        pwmHlConfig.base.deadtime         = 2e-6;
+        pwmHlConfig.base.minPulse         = 1e-6;
+        pwmHlConfig.base.channelCount     = 2;
+        pwmHlConfig.base.emergencyEnabled = FALSE;
+        pwmHlConfig.base.outputMode       = IfxPort_OutputMode_pushPull;
+        pwmHlConfig.base.outputDriver     = IfxPort_PadDriver_cmosAutomotiveSpeed1;
+        pwmHlConfig.base.ccxActiveState   = Ifx_ActiveState_high;
+        pwmHlConfig.base.coutxActiveState = Ifx_ActiveState_high;
+        pwmHlConfig.ccx                   = ccx;
+        pwmHlConfig.coutx                 = coutx;
+
+#endif
 
         IfxGtm_Tom_PwmHl_init(&g_GtmTomPwmHl.drivers.pwm, &pwmHlConfig);
 

@@ -102,8 +102,8 @@ void GtmTomTimer_initTimer(void)
         timerConfig.triggerOut                      = &IfxGtm_TOM1_7_TOUT32_P33_10_OUT;
 #elif BOARD == SHIELD_BUDDY
         timerConfig.tom                  = IfxGtm_Tom_0;
-        timerConfig.timerChannel         = IfxGtm_Tom_Ch_9;
-        timerConfig.triggerOut                      = &IfxGtm_TOM0_9_TOUT1_P02_1_OUT;
+        timerConfig.timerChannel         = IfxGtm_Tom_Ch_12;
+        timerConfig.triggerOut                      = &IfxGtm_TOM0_12_TOUT98_P11_9_OUT;
 #endif
         timerConfig.base.trigger.outputEnabled      = TRUE;
         timerConfig.base.trigger.enabled            = TRUE;

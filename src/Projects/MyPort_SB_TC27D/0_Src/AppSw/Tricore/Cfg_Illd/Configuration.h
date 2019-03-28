@@ -42,7 +42,6 @@
 /* APPLICATION_KIT_TC237 혹은 SHIELD_BUDDY 중에 한가지만 선택*/
 #define APPLICATION_KIT_TC237 1
 #define SHIELD_BUDDY 2
-#define BOARD SHIELD_BUDDY
 
 /** \addtogroup IfxLld_Demo_Template_SrcDoc_Config
  * \{ */
@@ -60,10 +59,10 @@
 	#define PORT00_1					IfxPort_P00_1
 
 #elif BOARD == SHIELD_BUDDY
-	#define LED_TICK					IfxPort_P33_3
-	#define LED0						IfxPort_P33_0
-	#define LED1						IfxPort_P33_1
-	#define LED2						IfxPort_P33_2
+	#define LED_TICK					IfxPort_P10_2
+	#define LED0						IfxPort_P00_4
+	#define LED1						IfxPort_P00_3
+	#define LED2						IfxPort_P00_2
 
 	#define PORT00_0					IfxPort_P00_0
 	#define PORT00_1					IfxPort_P00_1

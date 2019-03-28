@@ -99,39 +99,6 @@ IFX_INTERRUPT(asclin0ErISR, 0, ISR_PRIORITY_ASC_0_EX)
 
 /** \} */
 #elif BOARD == SHIELD_BUDDY
-/** \addtogroup IfxLld_Demo_AsclinAsc_SrcDoc_Main_Interrupt
- * \{ */
-
-///** \name Interrupts for Transmit
-// * \{ */
-//
-//IFX_INTERRUPT(asclin3TxISR, 0, ISR_PRIORITY_ASC_3_TX)
-//{
-//    IfxAsclin_Asc_isrTransmit(&g_AsclinAscUsb.drivers.asc);
-//}
-//
-///** \} */
-//
-///** \name Interrupts for Receive
-// * \{ */
-//
-//IFX_INTERRUPT(asclin3RxISR, 0, ISR_PRIORITY_ASC_3_RX)
-//{
-//    IfxAsclin_Asc_isrReceive(&g_AsclinAscUsb.drivers.asc);
-//
-//}
-//
-///** \} */
-//
-///** \name Interrupts for Error
-// * \{ */
-//
-//IFX_INTERRUPT(asclin3ErISR, 0, ISR_PRIORITY_ASC_3_EX)
-//{
-//    IfxAsclin_Asc_isrError(&g_AsclinAscUsb.drivers.asc);
-//}
-
-/** \} */
 /** \name Interrupts for Transmit
  * \{ */
 
@@ -184,8 +151,8 @@ void AsclinAscBtDemo_init(void)
 #endif
     /* set the desired baudrate */
     ascConfig.baudrate.prescaler    = 1;
-//    ascConfig.baudrate.baudrate     = 9600; /* FDR values will be calculated in initModule */
-    ascConfig.baudrate.baudrate     = 115200; /* FDR values will be calculated in initModule */
+    ascConfig.baudrate.baudrate     = 9600; /* FDR values will be calculated in initModule */
+//    ascConfig.baudrate.baudrate     = 115200; /* FDR values will be calculated in initModule */
     ascConfig.baudrate.oversampling = IfxAsclin_OversamplingFactor_4;
 #if BOARD == APPLICATION_KIT_TC237
 
@@ -273,11 +240,6 @@ void AsclinAscBtDemo_run(void)
     	wait(TimeConst_100ms);
     }while(FALSE == status);
 
-//    do{
-//		status = AsclinAscBtComm("AT+VERSION", "OKlinvorV1.8");
-//    	wait(TimeConst_100ms);
-//    }while(FALSE == status);
-//
     do{
     	status = AsclinAscBtComm("AT+NAMEMyRacer", "OKsetname");
     	wait(TimeConst_100ms);

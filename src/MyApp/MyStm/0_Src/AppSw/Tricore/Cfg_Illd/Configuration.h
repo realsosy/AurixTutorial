@@ -41,7 +41,6 @@
 /* APPLICATION_KIT_TC237 혹은 SHIELD_BUDDY 중에 한가지만 선택*/
 #define APPLICATION_KIT_TC237 	1
 #define SHIELD_BUDDY 			2
-//#define BOARD 					SHIELD_BUDDY
 
 /** \addtogroup IfxLld_Demo_Template_SrcDoc_Config
  * \{ */
