@@ -241,4 +241,4 @@ void GtmTomServo_run(void)
 
 **시간과 관련된 디지탈 신호** 를 잘 다룰 수 있게 되면, **마이크로컨트롤러의 지배자** 가 될 수 있습니다.
 
-[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/ChronosRuler.md?pixel)](https://github.com/realsosy/aurixtutorial)
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/ChronosRuler.md?pixel)](https://github.com/realsosy/aurixtutorial)
