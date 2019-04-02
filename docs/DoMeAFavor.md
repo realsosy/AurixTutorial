@@ -330,3 +330,5 @@ void STM_Int0Handler(void)
 * iLLD는 이렇게 AURIX의 모듈을 사용할 때 **우리에게 편의를 제공**하고 있습니다.
 
 * 우리들은 iLLD를 사용해서 AURIX가 **외부 이벤트들에게 편의를 제공하도록** 프로그래밍 할 수 있습니다.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/DoMeAFavor.md?pixel)](https://github.com/realsosy/aurixtutorial)
