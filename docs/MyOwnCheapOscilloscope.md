@@ -450,4 +450,4 @@ ADC의 성능을 이야기 하면서 숫자에 집착하여 채널이 많고, �
 
 이곳 에서 다루지 않은 내용으로는 하드웨어 타이머를 사용하여 특정 타이밍에  수~수십 usec 주기마다 AD 변환을 수행하는 기법이 있습니다.  모터 구동에서 전류 샘플링과 같이 PWM신호와 동기화 되어 매 주기마다 연산을 수행해야 하는 경우에 사용됩니다.  아울러 고속으로 특정 채널의 값을 연속적으로  ADC가 변환해 놓고 일정 주기 마다 이 변환값들을 일괄적으로 처리하는 기법 등이 있습니다.  이런 모든 경우에 VADC는 효과적으로 사용할 수 있는 쓸만한(?), 그러나 조금은 까탈스러운, ADC 입니다.
 
-
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/MyOwnCheapOscilloscope.md?pixel)](https://github.com/realsosy/aurixtutorial)
