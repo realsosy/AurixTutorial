@@ -77,3 +77,4 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 * [References](./References.md)
 * [Source code list](./src/README.md)
 
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/Index.md?pixel)](https://github.com/realsosy/aurixtutorial)
