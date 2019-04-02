@@ -299,3 +299,5 @@ void appTaskfu_10ms(void)
 }
 
 ```
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/MultipleInfiniteLoops.md?pixel)](https://github.com/realsosy/aurixtutorial)
