@@ -1,7 +1,7 @@
 ---
 title: What is iLLD
-author: Wootaik Lee (wootaik@gmail.com)  
-date: 2018-01-30
+author: Wootaik Lee (wootaik@gmail.com) / Kyunghan Min (kyunghah.min@gmail.com) 
+date: 2019-03-21
 ---
 
 
@@ -20,15 +20,17 @@ date: 2018-01-30
 * iLLD의 Demo code와 AURIX User Manual을 참고하는 방법을 익힌다.
 
 ## References
-* iLLD_TC23A 1.0.1.4.0 도움말: IFX Low Level Drivers
+* iLLD_TCXX 1.0.1.8.0 도움말: IFX Low Level Drivers
 * AURIX TC23x Family User's Manual - Toc & Introduction
-* iLLD_TC23A_Demos_1_0_1_4_0 - StmDemo
+* AURIX TC27x Family User's Manual - Toc & Introduction
+* iLLD_1_0_1_8_0_TC2xx_Demos - StmDemo
 
 **[Example Code]**
 
-* _MyiLLDFramework_TC23A
-* MyStm_TC23A
-* MyPort_TC23A
+* _iLLD_Framework_AK_TC23A
+* _iLLD_Framework_SB_TC27A
+* MyPort_AK_TC23A
+* MyPort_SB_TC27D
 
 
 
@@ -63,7 +65,7 @@ date: 2018-01-30
 ### iLLD Help 참고하는 방법
 
 * iLLD는 설치했는데 어떻게 사용하는 것이지? 설명서는 어디 있는 것인가?
-    * **iLLD_1_0_1_4_0/Doc/TC23A/html/index.html** 파일을 열면 browser 로 확인할 수 있다.
+    * **iLLD_1_0_1_8_0_TCXX/Doc/TCXX/html/index.html** 파일을 열면 browser 로 확인할 수 있다.
     * 별도의 문서를 따로 만든 것이 아니라 BIFACES의 DoxyGen 기능을 사용하여 생성한 문서이다.
     ![WhatIsIlld_IlldStart](images/WhatIsIlld_IlldStart.png)
 
@@ -97,11 +99,11 @@ date: 2018-01-30
 <Driver Prefix>_<functionality>(<Driver Prefix>_Handle *handle)
 ```
 
-* in Naming Conventions (Open MyStm_TC23A Project)
+* in Naming Conventions (Open MyStm_ Project)
 
 
 ```c
-// in StmDemo.h
+// in Src\AppSw\Tricore\StmDemo.h
     typedef struct
     {
         Ifx_STM             *stmSfr;            /**< \brief Pointer to Stm register base */
@@ -110,7 +112,7 @@ date: 2018-01-30
         volatile uint32      counter;           /**< \brief interrupt counter */
     } App_Stm;
 
-// in StmDemo.c
+// in Src\AppSw\Tricore\StmDemo.c
     App_Stm g_Stm;
     //
     IfxStm_initCompareConfig(&g_Stm.stmConfig);
@@ -172,31 +174,41 @@ date: 2018-01-30
 
 
 
-## MyStm\_TC23A 만들기
+## My project 만들기 - MyStm_TC23A(TC27D)
+
+### Target board 에 관하여
+
+* Aurix Tutorial에서는 모든 예제 프로젝트가 TC23A와 TC27D를 지원하도록 구성되어 있다.
+* 우리가 AURIX의 다양한 기능들을 사용하기 위한 부분은 위의 두 보드에 상관없이 동일하게 구성되어 있으며
+* 각 보드에 따라서 사용하는 iLLD와 이에 따라 Hardware configuration에 대응하는 부분만 차이를 갖는다.
+  * TC237 Application Kit 을 사용하는 경우 iLLD_1_0_1_8_0_TC23A를
+  * TC275 Shield Buddy 을 사용하는 경우 iLLD_1_0_1_8_0_TC27D를 사용하면 된다.
+  * iLLD의 사용 예가 포함된 demo project는 iLLD_1_0_1_8_0_TC2xx_Demos를 공통으로 사용한다.
+* TC23A를 사용할 경우 project_name에 TC23A가 있는 project를, TC27D를 사용하는 경우 TC27D를 포함하는 project를 이용하여 예제들을 진행하면 된다.
 
 ### Example Description
 
 * StmDemo 예제를 구성해서 실행해 보자
 * Stm을 사용하여 Port 출력으로1초마다 토글, 즉 2초 주기로 LED를 점멸해 보자
 
-**[첫단계]** \_MyiLLDFramework\_TC23A 만들기 <= \_MyBaseFramework\_TC23A + iLLD sources
+**[첫단계]** \_MyiLLDFramework\_TC23A(TC27D) 만들기 <= BaseFramework_TC23A(TC27D) + iLLD sources
 
 * iLLD를 사용할 수 있는 Framework 만들기
     * BaseFramework에는 최소한의 iLLD 구성 요소만 들어 있음
     * 필요한 모듈만 /0_Src/BaseSw 로 복사해서 선택적으로 사용해야한다.
     * 매 프로젝트마다 필요한 파일을 찾아서 복사하기 매우 번거로우므로 iLLD 소스를 모두 복사해서 사용
     * 항후 iLLD관련 프로젝트를 만들 때 이프로젝트를 복사해서 사용한다.
-* [Action] \_MyBaseFramework\_TC23A 를 복사해서 \_MyiLLDFramework\_TC23A 프로젝트 생성
-    * iLLD_1_0_1_4_0/Src/BaseSw 를 통째로 _MyiLLDFramework_TC23A/0_Src/BaseSw 로 복사
+* [Action] BaseFramework_TC23A(TC27D) 를 복사해서 \_MyiLLDFramework\_TC23A(TC27D) 프로젝트 생성
+    * iLLD_1_0_1_8_0_TC23A(TC27D)/Src/BaseSw 를 통째로 _MyiLLDFramework_TC23A(TC27D)/0_Src/BaseSw 로 복사
     * 모든 iLLD 모듈을 사용할 수 있게 된다.
 * [Check] 프로젝트를 빌드하고 실행해 본다.
 
-**[둘째단계]** MyStm\_TC23A 만들기
+**[둘째단계]** MyStm\_TC23A(TC27D) 만들기
 
 * StmDemo 예제를 복사, 혹은 import, 해서 실행해 본다.
-* [Action] _MyiLLDFramwork_TC23A 복사해서 MyStm_TC23A 프로젝트를 만든다.
-    * /iLLD_Demos_1_0_1_4_0_TC23A/demos/Aurix1G/StmDemo/0_Src/AppSw 밑의 파일들을 모두 복사해서 MyStm_TC23A/0_Src/AppSw 로 붙여 넣는다.
-    * /iLLD_Demos_1_0_1_4_0_TC23A/demos/Aurix1G/StmDemo/Doc/ 밑의 텍스트 파일을 열어본다.  프로그램 동작에 관한 간단한 설명이 나와 있다.  이 코드는 어떤
+* [Action] _MyiLLDFramwork_TC23A(TC27D) 복사해서 MyStm_TC23A(TC27D) 프로젝트를 만든다.
+    * /iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/0_Src/AppSw 밑의 파일들을 모두 복사해서 MyStm_TC23A/0_Src/AppSw 로 붙여 넣는다.
+    * /iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/Doc/ 밑의 텍스트 파일을 열어본다.  프로그램 동작에 관한 간단한 설명이 나와 있다.  
 * [Check] 프로젝트를 빌드하고 실행해 본다.  실행은 되고 브레이크 포인트도 동작하지만 LED가 점멸되지는 않는다.
 
 **[세째단계]** Customization
@@ -206,11 +218,12 @@ date: 2018-01-30
     * 이 프로그램의 동작은?
     * 사용하는 LED는 어느 핀에 연결되어 있어야 하는가?
     * 이 코드는 어떤 보드에서 확인이 된 것인가?
-* [Action2] AppKit TC2X7 보드의 메뉴얼과 도면을 참고해서 다음의 내용을 확인해 보세요.
-    * LED107 은 어떤 포트에 연결되어 있는가?
+* [Action2] 보드의 메뉴얼과 도면을 참조해서 LED 포트의 연결을 확인해 보세요.
+    * AppKit TC237 보드의 LED107 은 어떤 포트에 연결되어 있는가?
+    * Shield Buddy 의 LEDYELLOW (D401) 은 어느 포트에 연결되어 있는가?
 * [Action3] /Demo_Illd/StmDemo.c 파일을 열고 다음의 사항을 수정해 보세요.
-    * AppKit TC2X7 의 LED107 포트를 점멸할 수 있도록 해당 내용을 찾아 수정해 보세요.
-* [Check] 프로젝트를 빌드하고 실행해 본다.  LED107이 2초 주기로 점멸한다.
+    * 각 LED 포트를 점멸할 수 있도록 해당 내용을 찾아 수정해 보세요.
+* [Check] 프로젝트를 빌드하고 실행해 본다.  LED가 2초 주기로 점멸한다.
 * [Exercise] 2초 주기 => 0.2초 주기로 변경해 보세요.
 
 ### Demo Code를 분석하는 방법 Summary
@@ -225,19 +238,17 @@ date: 2018-01-30
 
 
 
-## MyPort_TC23A 만들기
+## MyPort_ 만들기
 
 * StmDemo를 살펴보니 디지탈 출력, 즉 Port를 사용하여 On/Off 하는 동작 코드가 들어 있습니다.
 * 이 코드를 활용해서 InfineonRacer 에서 디지털 입출력을 할 수 있는 모듈로 설계하고 구현해 보자.
 
 ```c
-//
 static void IfxBlinkLed_Init(void)
 {
     IfxPort_setPinMode(&MODULE_P33, 6, IfxPort_Mode_outputPushPullGeneral);
     IfxPort_setPinMode(&MODULE_P13, 0, IfxPort_Mode_outputPushPullGeneral);
 }
-//
 
 static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 {
@@ -256,8 +267,8 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
 ### Example Description
 
-* AppKit TC2X7 Board의 구체적인 하드웨어 핀과 설정 정보를 추상화하여
-    * LED108, 109, 110 을 점멸할 수 있는 함수와
+* Target board의 구체적인 하드웨어 핀과 설정 정보를 추상화하여
+    * LED0, 1, 2 를 점멸할 수 있는 함수와
     * Port0.0, Port0.1 의 정보를 읽어들일 수 있는 함수를 만들자
     * 구조체를 만들어서 이 값을 관리할 수 있도록 하자.
 
@@ -292,7 +303,8 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 [Exercise] How to use the Port I/O 영역을 읽어보고 다음의 질문에 답하세요.
 
 * Port iLLD를 사용하기 위해서는 어떤 헤더 파일을 include 해야 하나요?
-* P13.0 을 출력으로 설정하기 위해서는 어떻게 Pin Mode를 설정해야 하나요?
+* P13.0 (TC237의 LED0)을 출력으로 설정하기 위해서는 어떻게 Pin Mode를 설정해야 하나요?
+  * TC275는 P33.0를 출력으로 설정해 준다
 * P13.0 을 High 상태로 출력하려면 어떤 함수를 어떻게 해야 하나요?
 * P00.0 을 입력으로 설정하기 위해서는 어떻게 Pin Mode를 설정해야 하나요?
 * P00.0 의 입력을 읽어들이려면 어떤 함수를 어떻게 사용해야 하나요?
@@ -321,9 +333,9 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
 
 
-**[MyIlldModule_TC23A vs. InfineonRacer 프로젝트 구성]**
+**[MyIlldModule_ vs. InfineonRacer 프로젝트 구성]**
 
-* MyIlldModule_TC23A는 IO subsystem과 iLLD Module을 시험하기 위한 프로젝트입니다.
+* MyIlldModule_은 IO subsystem과 iLLD Module을 시험하기 위한 프로젝트입니다.
 * InfineonRacer는 시험된 모듈을 활용하여 용도에 맞게 개발해 가는 프로젝트 입니다.
 
 
@@ -349,7 +361,7 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
   ![WhatIsIlld_PortClassDiagram](images/WhatIsIlld_PortClassDiagram.png)
 
-  ​
+  
 
 * **Header 파일은 사용자가 참고해야 하는 정보들의 집합**
     * 다음의 코드와 같이
@@ -358,37 +370,29 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
     * 이러한 정보들로 Header를구성합니다.
 
 ```c
-// in header file
+// in AppSw\Tricore\Main\BasicPort.h
 typedef struct
 {
-	volatile boolean led108;
-	volatile boolean led109;
-	volatile boolean led110;
+	volatile boolean led0;
+	volatile boolean led1;
+	volatile boolean led2;
 	volatile boolean port00_0;
 	volatile boolean port00_1;
 } Basic_Port;
 
-/******************************************************************************/
-/*------------------------------Global variables------------------------------*/
-/******************************************************************************/
 IFX_EXTERN Basic_Port IR_Port;
 
-/******************************************************************************/
-/*-------------------------Function Prototypes--------------------------------*/
-/******************************************************************************/
-IFX_EXTERN void IR_setLed108(boolean led);
-IFX_EXTERN void IR_setLed109(boolean led);
-IFX_EXTERN void IR_setLed110(boolean led);
+// PORT 값 호출
+#define IR_getLed0() IR_Port.led0
+#define IR_getLed1() IR_Port.led1
+#define IR_getLed2() IR_Port.led2
+#define IR_getPort00_0() IR_Port.port00_0
+#define IR_getPort00_1() IR_Port.port00_1
 
-IFX_EXTERN boolean IR_getLed108(void);
-IFX_EXTERN boolean IR_getLed109(void);
-IFX_EXTERN boolean IR_getLed110(void);
-
-IFX_EXTERN boolean IR_getPort00_0(void);
-IFX_EXTERN boolean IR_getPort00_1(void);
-
-IFX_EXTERN void BasicPort_init(void);
-IFX_EXTERN void BasicPort_run(void);
+// PORT 값 설정
+IFX_EXTERN void IR_setLed0(boolean led);
+IFX_EXTERN void IR_setLed1(boolean led);
+IFX_EXTERN void IR_setLed2(boolean led);
 ```
 
 
@@ -397,16 +401,31 @@ IFX_EXTERN void BasicPort_run(void);
 **[두번째] Library 예제 코드, Snippet을 조합하여 기능 구현**
 
 * 라이브러리 분석으로 얻은 정보들로 해야하는 기능 함수들을 구현합니다.
-
-* 다음과 같이 구조적으로 함수와 변수들에 대하여 설계를 하고 각각을 구체화 합니다.
-
-  ​
+* 다음과 같이 구조적으로 함수와 변수들에 대하여 설계를 하고 각각을 구체화 합니다.​
 
 * 설정 정보 추출
+  * TC237보드와 TC275보드의 port pin이 다르기때문에 각각 board에 맞는 port를 output port로 정의한다.
 
 ```c
-#define LED107						IfxPort_P13_0
-#define PORT00_0					IfxPort_P00_0
+#if BOARD == APPLICATION_KIT_TC237
+	#define LED_TICK					IfxPort_P13_0
+	#define LED0						IfxPort_P13_1
+	#define LED1						IfxPort_P13_2
+	#define LED2						IfxPort_P13_3
+
+	#define PORT00_0					IfxPort_P00_0
+	#define PORT00_1					IfxPort_P00_1
+
+#elif BOARD == SHIELD_BUDDY
+	#define LED_TICK					IfxPort_P33_3
+	#define LED0						IfxPort_P33_0
+	#define LED1						IfxPort_P33_1
+	#define LED2						IfxPort_P33_2
+
+	#define PORT00_0					IfxPort_P00_0
+	#define PORT00_1					IfxPort_P00_1
+
+#endif
 ```
 
 * 초기화 함수
@@ -416,27 +435,32 @@ void BasicPort_init(void)
 {
 
 	/* IR_Port 변수 초기화 */
+    IR_Port.led0 = TRUE;
 
 	/* LED Port output */
-
+    IfxPort_setPinMode(LED0.port, LED0.pinIndex, IfxPort_Mode_outputPushPullGeneral);
+	IfxPort_setPinPadDriver(LED0.port, LED0.pinIndex, IfxPort_PadDriver_cmosAutomotiveSpeed1);
+	setOutputPin(LED0.port, LED0.pinIndex, IR_Port.led0);
+    
 	/* Digital Input */
-
+	IfxPort_setPinModeInput(PORT00_0.port, PORT00_0.pinIndex, IfxPort_InputMode_noPullDevice);
+	IR_Port.port00_0 =  IfxPort_getPinState(PORT00_0.port, PORT00_0.pinIndex);
 }
 ```
 
 * 입출력 함수
 
 ```c
-void IR_setLed108(boolean led){
+// 입력 함수 //
+void IR_setLed0(boolean led){
 	if(led != FALSE){
 		led = TRUE;
 	}
-	IR_Port.led108 = led;
+	IR_Port.led0 = led;
 }
 
-boolean IR_getLed108(){
-    return(IR_Port.led108);
-}
+// 출력 함수//
+#define IR_getLed0() IR_Port.led0
 ```
 
 * 주기적 실행 함수
@@ -445,10 +469,12 @@ boolean IR_getLed108(){
 void BasicPort_run(void)
 {
     /* LED Port output */
-	setOutputPin(LED108.port, LED108.pinIndex, IR_Port.led108);
-
+	setOutputPin(LED0.port, LED0.pinIndex, IR_Port.led0);
+	setOutputPin(LED1.port, LED1.pinIndex, IR_Port.led1);
+	setOutputPin(LED2.port, LED2.pinIndex, IR_Port.led2);
 	/* Digital Input */
 	IR_Port.port00_0 =  IfxPort_getPinState(PORT00_0.port, PORT00_0.pinIndex);
+	IR_Port.port00_1 =  IfxPort_getPinState(PORT00_1.port, PORT00_1.pinIndex);
 }
 
 static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
@@ -466,7 +492,7 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
 * [참고] 주기적 실행 함수, `Module_run()` 함수를 구성하는 이유
 
-    * `IR_setLed108()` 함수에서 LED108의 상태 변수를 변경하고
+    * `IR_setLed1()` 함수에서 LED1의 상태 변수를 변경하고
 
     * `BasicPort_run()` 함수에서 상태 변수 값으로 해당 포트에 출력을 합니다.
 
@@ -509,12 +535,4 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
 * 기능이 동작한다고 프로그래밍이 끝난 것이 아니다.
 * 청소부터 해야 한다. 쓸데 없는 주석은 없는지, 시험을 위해서 임시로 삽입된 코드는 없는지
-* 최적화 해야 한다.  메모리와 속도 측면에서
-
-```c
-boolean IR_getLed108(){
-    return(IR_led108);
-}
-
-#define IR_getLed108() IR_Port.led108
-```
+* 메모리와 속도 측면에서 최적화 해야 한다. 
