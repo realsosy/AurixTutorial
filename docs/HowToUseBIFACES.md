@@ -33,3 +33,5 @@ EXAMPLE: _MyBaseFramework_TC23A
 ## 추가적인 설명
 
 * ​
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/HowToUseBIFACES.md?pixel)](https://github.com/realsosy/aurixtutorial)
