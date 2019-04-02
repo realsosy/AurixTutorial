@@ -276,3 +276,5 @@ void AsclinAscDemo_run(void)
 2. 설정해둔 `printf()` 메세지가 출력되는 것을 확인할 수 있다.
 
 ![HelloWorld_SimIO](images/HelloWorld_SimIO.png)
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/HelloWorld.md?pixel)](https://github.com/realsosy/aurixtutorial)
