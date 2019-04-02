@@ -365,5 +365,5 @@ void Gpt12Demo_run(void)
 
 위치정보로 속도를 얻는 것도 고려해야 할 사항이 많습니다.  가장 간단하게는 위치정보를 미분해서 속도를 얻을 수 있지만 이 경우 노이즈가 증폭되어 부정확한 속도를 만들어 내게 됩니다.  이를 방지하기 위해서 필터를 사용하는 등 여러가지 신호처리 기법들이 사용됩니다.  최근 angle tracking observer 라 불리는 필터를 사용해서 위치정보를 필터링하고 속도정보를 얻는 기법이 일반적으로 많이 사용됩니다.
 
-
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/WhereAreYou.md?pixel)](https://github.com/realsosy/aurixtutorial)
 
