@@ -536,3 +536,5 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 * 기능이 동작한다고 프로그래밍이 끝난 것이 아니다.
 * 청소부터 해야 한다. 쓸데 없는 주석은 없는지, 시험을 위해서 임시로 삽입된 코드는 없는지
 * 메모리와 속도 측면에서 최적화 해야 한다. 
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/WhatIsIlld.md?pixel)](https://github.com/realsosy/aurixtutorial)
