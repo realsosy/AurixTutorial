@@ -288,3 +288,5 @@ void initTime(void)
 * **[중요]**
   * 위와 같은 방식으로 프로그래밍 하는 것이 스케쥴러의 기본 아이디어 입니다.  
   * 여기서 가장 기본이 되는 주기적 증가 카운터, 이 예에서는 `g_Stm.counter` 를 Tick 이라 부르며, 시계의 초침과 같은 역할을 합니다.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/TwinkleTwinkleLittleStar.md?pixel)](https://github.com/realsosy/aurixtutorial)
