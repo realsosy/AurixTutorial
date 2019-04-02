@@ -306,3 +306,5 @@ void BasicLineScan_run(void)
   * 센서 출력 값의 전압 범위 및 주기
   * ADC 측정 해상도
 * 무엇보다 임베디드 보드로 센서값을 계측하기 전에 하드웨어적으로 문제가 없는 지를 다시한번 확인하고  오실로스코프로 최종 확인을 하는 것이 중요합니다.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-137501847-2/AurixTutorial/docs/LineScanCamera.md?pixel)](https://github.com/realsosy/aurixtutorial)
