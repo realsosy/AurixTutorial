@@ -32,14 +32,15 @@ date: 2017-09-01
 
 **[Example Code]**
 
-* MyIlldModule_TC23A - VadcAutoScan
-* InfineonRacer_TC23A - TestStm
+* MyIlldModule_StmStaticCycle
 
+* MyIlldModule_VadcAutoScan
 
+  
 
 ## Infinite-loop을 활용한 실행
 
-* **MyIlldModule_TC23A - VadcAutoScan**  예제의 main 함수를 살펴보자.
+* **MyIlldModule_VadcAutoScan**  예제의 main 함수를 살펴보자.
 
 ```c
 #include "SysSe/Bsp/Bsp.h"
@@ -172,7 +173,7 @@ sequenceDiagram
 	deactivate BasicStm
 	loop Every Cycle
 		activate BasicStm
-		BasicStm ->> BasicStm: STM_Int0Handler()
+		BasicStm ->> StmStaticCycle: STM_Int0Handler()
 		BasicStm ->> appTaskFu: appIsrCb_1ms()
             activate appTaskFu
             deactivate appTaskFu
@@ -293,9 +294,7 @@ void appTaskfu_1ms(void)
 }
 void appTaskfu_10ms(void)
 {
-	/* 중간생략 */
-    BasicLineScan_run();
-    InfineonRacer_detectLane();
+	/* 중간생략 */   
 }
 
 ```
