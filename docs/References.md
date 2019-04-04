@@ -10,7 +10,9 @@
 ### AURIX 관련
 
 * [TC23x TC22x Family User's Manual v1.1](../references/tc23x_tc22x_um_v1.1.pdf)
+* [TC27x Family User's Manual v2.2](../references/tc27xD_um_v2.2.pdf)
 * [TC23x Data Sheet v1.1](../references/TC23x_DS_v1.1.pdf)
+* [TC27x Data Sheet v1.1](../references/Infineon-TC27xDC_DS_v10-DS-v01_00-EN.pdf)
 
 ### Sensor & Actuator 관련
 
