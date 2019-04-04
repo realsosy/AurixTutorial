@@ -31,6 +31,8 @@ date: 2019-03-21
 * _iLLD_Framework_SB_TC27A
 * MyPort_AK_TC23A
 * MyPort_SB_TC27D
+* MyStm_AK_TC23A
+* MyStm_SB_TC27D
 
 
 
@@ -244,10 +246,15 @@ date: 2019-03-21
 * 이 코드를 활용해서 InfineonRacer 에서 디지털 입출력을 할 수 있는 모듈로 설계하고 구현해 보자.
 
 ```c
+//in StmDemo.c
+
 static void IfxBlinkLed_Init(void)
 {
-    IfxPort_setPinMode(&MODULE_P33, 6, IfxPort_Mode_outputPushPullGeneral);
+#if BOARD == APPLICATION_KIT_TC237
     IfxPort_setPinMode(&MODULE_P13, 0, IfxPort_Mode_outputPushPullGeneral);
+#elif BOARD ==SHIELD_BUDDY
+    IfxPort_setPinMode(&MODULE_P10, 2, IfxPort_Mode_outputPushPullGeneral);
+#endif
 }
 
 static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
@@ -304,12 +311,10 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
 * Port iLLD를 사용하기 위해서는 어떤 헤더 파일을 include 해야 하나요?
 * P13.0 (TC237의 LED0)을 출력으로 설정하기 위해서는 어떻게 Pin Mode를 설정해야 하나요?
-  * TC275는 P33.0를 출력으로 설정해 준다
+  * TC275는 P10.2를 출력으로 설정해 준다
 * P13.0 을 High 상태로 출력하려면 어떤 함수를 어떻게 해야 하나요?
 * P00.0 을 입력으로 설정하기 위해서는 어떻게 Pin Mode를 설정해야 하나요?
 * P00.0 의 입력을 읽어들이려면 어떤 함수를 어떻게 사용해야 하나요?
-
-
 
 * How to use 영역을 살펴보다 보면 구체적인 Method에 대하여 궁금해지고, 그 Method에서 사용하는 자료형 등에 대하여 확인할 필요가 있습니다.  이때 해당 함수, Method에 대하여 검색, 혹은 Link를 사용해서 찾아보면 됩니다.
 
@@ -417,10 +422,10 @@ IFX_EXTERN void IR_setLed2(boolean led);
 	#define PORT00_1					IfxPort_P00_1
 
 #elif BOARD == SHIELD_BUDDY
-	#define LED_TICK					IfxPort_P33_3
-	#define LED0						IfxPort_P33_0
-	#define LED1						IfxPort_P33_1
-	#define LED2						IfxPort_P33_2
+	#define LED_TICK					IfxPort_P10_2
+	#define LED0						IfxPort_P00_4
+	#define LED1						IfxPort_P00_3
+	#define LED2						IfxPort_P00_2
 
 	#define PORT00_0					IfxPort_P00_0
 	#define PORT00_1					IfxPort_P00_1
@@ -504,7 +509,7 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 
     * 시스템의 보호나 예외상황의 처리와 같은 사건들은 스케쥴러를 통하지 않고 바로 처리하도록 구성할 수도 있습니다.
 
-    ​
+    
 
 **[세번째] Test & Debug**
 

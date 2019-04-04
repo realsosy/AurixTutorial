@@ -29,20 +29,19 @@ Objectives
 References
 ----------
 
-*	TC23x TC22x Family User's Manual v1.1 - 17 STM
-* iLLD_TC23A 1.0.1.4.0 - Modules/iLLD/STM
+*	TC23x TC27x Family User's Manual v1.1 - 17 STM
+* iLLD_1_0_1_8_0_TC2xx_Drivers_And_Demos_Release - Modules/iLLD/STM
 
 **[Example Code]**
 
-* MyStm_TC23A
-
 * MyIlldModule_TC23A - Stm
+* MyIlldModule_TC27D - Stm
 
 Example Description
 -------------------
 
 * 시스템 타이머를 사용해서 1초 마다 인터럽트를 발생시킨다.
-* 인터럽트를 이용해서 2초 주기로 LED107를 점멸시킨다.
+* 인터럽트를 이용해서 2초 주기로 LED_TICK을 점멸시킨다.
 
 
 
@@ -64,7 +63,7 @@ AURIX - related
 #### STM (System timer)
 
 * 64-bit timer of 32-bit microcontroller
-    - TC237이 한 번의 명령어로 다룰 수 있는 데이터량은 32 bit 이며,
+    - TC2XX이 한 번의 명령어로 다룰 수 있는 데이터량은 32 bit 이며,
   	- 하나의 레지스터에는 최대 2^32의 *Tick* 을 누적시킬 수 있다.
 
     - STM은 복수의 32-bit 레지스터를 사용하여 *Tick* 의 누적허용량을 늘리면서,
@@ -88,7 +87,7 @@ AURIX - related
   	- 이를 위해서 timer를 인터럽트를 발생시키기 위한 trigger 역할로 이용 할 수 있다.
   	- STM에서는 이를 위한 compare register라는 것이 존재하며 구성하여 이용할 수 있다.
   	- 구성된 register는 tick이 쌓일 때마다 비교를 하여 일치할 시 flag를 발생시킨다.
-  	- TC237은 두 개의 compare 레지스터를 제공하며 선택적으로 사용할 수 있다.
+  	- TC2XX은 두 개의 compare 레지스터를 제공하며 선택적으로 사용할 수 있다.
 
 ![TwinkleTwinkleLittleStar_CompareMode](images/TwinkleTwinkleLittleStar_CompareMode.png)
 
@@ -283,7 +282,7 @@ void initTime(void)
 
 ### [Exercise 1] 바ㅡㅡ안 짜ㅡㅡ악 을 빤짝빤짝 으로
 
-* 위의 예제는 인터럽트의 주기가 1초이기 때문에 LED107의 점멸 주기는 2초가 됩니다.
+* 위의 예제는 인터럽트의 주기가 1초이기 때문에 LED_TICK의 점멸 주기는 2초가 됩니다.
 * 주기를 100msec로 바꿔서 200msec 주기로, 즉 LED를 5Hz의 주기로 점멸시켜 봅시다.
 * 위의 코드에서 2군데만 수정하면 됩니다.
 
