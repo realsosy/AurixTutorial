@@ -26,12 +26,13 @@ date: 2018-05-03
 
 ## References
 
-*	TC23x TC22x Family User's Manual v1.1 - 19 ASCLIN
-* iLLD_TC23A 1.0.1.4.0 - Modules/iLLD/ASCLIN
+*	TC23x TC27x Family User's Manual v1.1 - 19 ASCLIN
+* iLLD_1_0_1_8_0_TC2xx_Drivers_And_Demos_Release - Modules/iLLD/ASCLIN
 
 **[Example Code]**
 
 * MyIlldModule_TC23A - AsclinAsc
+* MyIlldModule_TC27D - AsclinAsc
 
 ## Example Description
 
@@ -112,10 +113,10 @@ date: 2018-05-03
 ### Module Configuration
 
 * Asclin의 모듈 초기화
-    * 사용할 protocol(AsclinAsc; uart)을 정하고,
-    * 송수신이 일어날 물리적 pin(P14.0, 14.1)을 고르고,
+    * 사용할 protocol(AsclinAsc; uart)을 정하고 (TC23A: module 0, TC27D: module 3),
+    * 송수신이 일어날 물리적 pin(TC23A: P14.0, 14.1, TC27D: P32.2, 15.7)을 고르고,
     * Data 전송 속도를 정한 뒤,
-    (AURIX와 통신을 진행하는 기기와 동일하게 맞춤)
+      (AURIX와 통신을 진행하는 기기와 동일하게 맞춤)
     * 통신관련 Interrupt 설정
 
 ```c
@@ -123,8 +124,11 @@ void AsclinAscDemo_init(void)
 {
 	//...
     // create module config
-    IfxAsclin_Asc_Config ascConfig;
-    IfxAsclin_Asc_initModuleConfig(&ascConfig, &MODULE_ASCLIN0);
+    #if BOARD == APPLICATION_KIT_TC237
+        IfxAsclin_Asc_initModuleConfig(&ascConfig, &MODULE_ASCLIN0);
+    #elif BOARD == SHIELD_BUDDY
+        IfxAsclin_Asc_initModuleConfig(&ascConfig, &MODULE_ASCLIN3);
+    #endif
 
     // set the desired baudrate
     ascConfig.baudrate.prescaler    = 1;
@@ -132,9 +136,16 @@ void AsclinAscDemo_init(void)
     ascConfig.baudrate.oversampling = IfxAsclin_OversamplingFactor_4;
 
     // ISR priorities and interrupt target
-    ascConfig.interrupt.txPriority    = ISR_PRIORITY_ASC_0_TX;
-    ascConfig.interrupt.rxPriority    = ISR_PRIORITY_ASC_0_RX;
-    ascConfig.interrupt.erPriority    = ISR_PRIORITY_ASC_0_EX;
+    #if BOARD == APPLICATION_KIT_TC237
+        /* ISR priorities and interrupt target */
+        ascConfig.interrupt.txPriority    = ISR_PRIORITY_ASC_0_TX;
+        ascConfig.interrupt.rxPriority    = ISR_PRIORITY_ASC_0_RX;
+        ascConfig.interrupt.erPriority    = ISR_PRIORITY_ASC_0_EX;
+    #elif BOARD == SHIELD_BUDDY
+        ascConfig.interrupt.txPriority    = ISR_PRIORITY_ASC_3_TX;
+        ascConfig.interrupt.rxPriority    = ISR_PRIORITY_ASC_3_RX;
+        ascConfig.interrupt.erPriority    = ISR_PRIORITY_ASC_3_EX;
+    #endif
     ascConfig.interrupt.typeOfService = (IfxSrc_Tos)IfxCpu_getCoreIndex();
 
     // FIFO configuration
@@ -145,13 +156,23 @@ void AsclinAscDemo_init(void)
     ascConfig.rxBufferSize = ASC_RX_BUFFER_SIZE;
 
     // pin configuration
+#if BOARD == APPLICATION_KIT_TC237
     const IfxAsclin_Asc_Pins pins = {
-        NULL_PTR,                     IfxPort_InputMode_pullUp,        // CTS pin not used
-        &IfxAsclin0_RXA_P14_1_IN, IfxPort_InputMode_pullUp,        // Rx pin
-        NULL_PTR,                     IfxPort_OutputMode_pushPull,     //RTS pin not used
-        &IfxAsclin0_TX_P14_0_OUT, IfxPort_OutputMode_pushPull,     // Tx pin
+        NULL_PTR,                     IfxPort_InputMode_pullUp,        /* CTS pin not used */
+        &IfxAsclin0_RXA_P14_1_IN, IfxPort_InputMode_pullUp,        /* Rx pin */
+        NULL_PTR,                     IfxPort_OutputMode_pushPull,     /* RTS pin not used */
+        &IfxAsclin0_TX_P14_0_OUT, IfxPort_OutputMode_pushPull,     /* Tx pin */
         IfxPort_PadDriver_cmosAutomotiveSpeed1
     };
+#elif BOARD == SHIELD_BUDDY
+    const IfxAsclin_Asc_Pins pins = {
+        NULL_PTR,                     IfxPort_InputMode_pullUp,        /* CTS pin not used */
+        &IfxAsclin3_RXD_P32_2_IN, IfxPort_InputMode_pullUp,        /* Rx pin */
+        NULL_PTR,                     IfxPort_OutputMode_pushPull,     /* RTS pin not used */
+        &IfxAsclin3_TX_P15_7_OUT, IfxPort_OutputMode_pushPull,     /* Tx pin */
+        IfxPort_PadDriver_cmosAutomotiveSpeed1
+    };
+#endif
     ascConfig.pins = &pins;
 
     // initialize module
