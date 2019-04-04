@@ -1,7 +1,7 @@
 ---
 title: Do me a favor?
-author: Wootaik Lee (wootaik@gmail.com)  
-date: 2018-01-30
+author: Wootaik Lee (wootaik@gmail.com)  / Kyunghan Min (kyunghah.min@gmail.com)
+date: 2019-04-04
 ---
 
 # Do Me a Favor?
@@ -30,12 +30,13 @@ iLLD 라이브러리를 사용하면서 간단한 메쏘드(함수)를 호출하
 * **인터럽트 관련 서비스를 활용**할 수 있도록 한다.
 
 ## References
-* iLLD_TC23A 1.0.1.4.0 도움말 - STM, CPU/Interrupt Functions
-* iLLD_TC23A_Demos_1_0_1_4_0 - StmDemo
+* iLLD_TCXX 1.0.1.8.0 도움말 - STM, CPU/Interrupt Functions
+* iLLD_1_0_1_8_0_TC2XX_Demos - StmDemo
 
 **[Example Code]**
 
 * MyStm_TC23A
+* MyStm_TC27D
 
 
 
@@ -61,7 +62,7 @@ iLLD 라이브러리를 사용하면서 간단한 메쏘드(함수)를 호출하
     * 모듈별로 명명법에 따라 선언/정의 되어 있고,
     * Configuration Data Structure 와 Handler를 사용하여 해당 동작을 수행한다.
 
-    ​
+    
 
 
 ![DoMeAFavor_ModuleInfo](images/DoMeAFavor_ModuleInfo.png)
@@ -220,7 +221,7 @@ void STM_Int0Handler(void)
 #### [사전조건 3] 모듈의 해당 인터럽트 활성화
 
 ```c
-// StmDemo.c 의 137행
+// StmDemo.c 의 143행
 void IfxStmDemo_init(void)
 {
     /* disable interrupts */
@@ -240,12 +241,12 @@ void IfxStmDemo_init(void)
     * `ISR_PRIORITY_STM_INT0`: ConfigurationIsr.h 에 정의된 인터럽트 관련 설정 정보
     * `IfxSrc_Tos_cpu0`: Multi-core 여서 CPU0 에서 실행한다는 의미
 
-    ​
+    
 
 #### [사전조건 4] CPU가 인터럽트를 받아들이게 설정
 
 ```c
-// Cpu0_Main.c 의 77 행
+// Cpu0_Main.c 의 74 행
 int core0_main(void)
 {
 	// 중간 생략
@@ -266,7 +267,7 @@ int core0_main(void)
     * `IfxCpu_enableInterrupts()`가 호출 되던지 다른 방법으로,  `IfxCpu_restoreInterrupts()` 와 같은 함수로 이전 상태를 복구 할 때 까지 모든 인터럽트는 처리되지 않게(Blocking) 됩니다.
     * 이 코드가 필요한 이유는 특정 코드가 실행 될 때 인터럽트 등으로 인해서 방해 받지 않도록 하기 위함입니다.  이와 같은 동작을 atomic operation 이라 이렇게 보호되는 코드 영역을 atomic section 이라 부릅니다.
 
-  ​
+  
 
 #### [실행 5] 모듈의 인터럽트 발생, 해당 플래그 세트
 
@@ -277,7 +278,7 @@ int core0_main(void)
     * 일반적으로 모듈의 인터럽트 플래그는 자동적으로 세트 됩니다.
     * 그러므로 소프트웨어 상으로 프로그래밍 할 것은 없습니다.
 
-  ​
+  
 
 #### [실행 6] CPU의 인터럽트 서비스 루틴 실행
 
@@ -325,7 +326,7 @@ void STM_Int0Handler(void)
     * 제공하는 설정파일, ConfigurationIsr.h,을 사용해서 인터럽트 관련 정보들을 정리하고
     * `IFX_INTERRUP` 함수를 사용해서 저수준의 정보들을 등록할 수 있습니다.
 
-  ​
+  
 
 * iLLD는 이렇게 AURIX의 모듈을 사용할 때 **우리에게 편의를 제공**하고 있습니다.
 
