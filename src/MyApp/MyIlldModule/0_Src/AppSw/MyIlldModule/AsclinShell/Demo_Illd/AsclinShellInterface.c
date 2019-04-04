@@ -30,6 +30,7 @@
 #include "IfxLldVersion.h"
 #include "_Impl/IfxGlobal_cfg.h"
 #include "Cpu0_Main.h"
+#include "BasicPort.h"
 
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
@@ -60,18 +61,39 @@ App_AsclinShellInterface g_AsclinShellInterface; /**< \brief Demo information */
 
 boolean AppShell_status(pchar args, void *data, IfxStdIf_DPipe *io);
 boolean AppShell_info(pchar args, void *data, IfxStdIf_DPipe *io);
+boolean AppShell_led0(pchar args, void *data, IfxStdIf_DPipe *io);
+boolean AppShell_led1(pchar args, void *data, IfxStdIf_DPipe *io);
+boolean AppShell_led2(pchar args, void *data, IfxStdIf_DPipe *io);
 
 /******************************************************************************/
 /*------------------------Private Variables/Constants-------------------------*/
 /******************************************************************************/
 
 /** \brief Application shell command list */
+
+#if BOARD == APPLICATION_KIT_TC237
+/** \brief Application shell command list */
 const Ifx_Shell_Command AppShell_commands[] = {
     {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
     {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
+	{"l108", "       : LED 108", &g_AsclinShellInterface,       &AppShell_led0,    },
+	{"l109", "       : LED 109", &g_AsclinShellInterface,       &AppShell_led1,    },
+	{"l110", "       : LED 110", &g_AsclinShellInterface,       &AppShell_led2,    },
     {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
     IFX_SHELL_COMMAND_LIST_END
 };
+#elif BOARD == SHIELD_BUDDY
+/** \brief Application shell command list */
+const Ifx_Shell_Command AppShell_commands[] = {
+    {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
+    {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
+	{"l0", "       : LED 0", &g_AsclinShellInterface,       &AppShell_led0,    },
+	{"l1", "       : LED 1", &g_AsclinShellInterface,       &AppShell_led1,    },
+	{"l2", "       : LED 2", &g_AsclinShellInterface,       &AppShell_led2,    },
+    {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
+    IFX_SHELL_COMMAND_LIST_END
+};
+#endif
 
 /******************************************************************************/
 /*-------------------------Function Implementations---------------------------*/
@@ -82,9 +104,78 @@ const Ifx_Shell_Command AppShell_commands[] = {
 /** \name Interrupts for Serial interface
  * \{ */
 
-IFX_INTERRUPT(ISR_Asc_0_rx, 0, ISR_PRIORITY_ASC_0_RX);
-IFX_INTERRUPT(ISR_Asc_0_tx, 0, ISR_PRIORITY_ASC_0_TX);
-IFX_INTERRUPT(ISR_Asc_0_ex, 0, ISR_PRIORITY_ASC_0_EX);
+#if BOARD == APPLICATION_KIT_TC237
+/** \addtogroup IfxLld_Demo_AsclinAsc_SrcDoc_Main_Interrupt
+ * \{ */
+
+/** \name Interrupts for Transmit
+ * \{ */
+
+IFX_INTERRUPT(asclin0TxISR, 0, ISR_PRIORITY_ASC_0_TX)
+{
+    IfxAsclin_Asc_isrTransmit(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \name Interrupts for Receive
+ * \{ */
+
+IFX_INTERRUPT(asclin0RxISR, 0, ISR_PRIORITY_ASC_0_RX)
+{
+    IfxAsclin_Asc_isrReceive(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \name Interrupts for Error
+ * \{ */
+
+IFX_INTERRUPT(asclin0ErISR, 0, ISR_PRIORITY_ASC_0_EX)
+{
+    IfxAsclin_Asc_isrError(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \} */
+#elif BOARD == SHIELD_BUDDY
+/** \addtogroup IfxLld_Demo_AsclinAsc_SrcDoc_Main_Interrupt
+ * \{ */
+
+/** \name Interrupts for Transmit
+ * \{ */
+
+IFX_INTERRUPT(asclin3TxISR, 0, ISR_PRIORITY_ASC_3_TX)
+{
+    IfxAsclin_Asc_isrTransmit(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \name Interrupts for Receive
+ * \{ */
+
+IFX_INTERRUPT(asclin3RxISR, 0, ISR_PRIORITY_ASC_3_RX)
+{
+    IfxAsclin_Asc_isrReceive(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \name Interrupts for Error
+ * \{ */
+
+IFX_INTERRUPT(asclin3ErISR, 0, ISR_PRIORITY_ASC_3_EX)
+{
+    IfxAsclin_Asc_isrError(&g_AsclinShellInterface.drivers.asc);
+}
+
+/** \} */
+
+/** \} */
+#endif
+
 
 /** \} */
 
@@ -190,6 +281,59 @@ boolean AppShell_info(pchar args, void *data, IfxStdIf_DPipe *io)
     return TRUE;
 }
 
+boolean AppShell_led0(pchar args, void *data, IfxStdIf_DPipe *io)
+{
+	sint32 led;
+	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
+    {
+        IfxStdIf_DPipe_print(io, "  Syntax     : l0 0/1"ENDL);
+    }
+    else
+    {
+    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
+    		IR_setLed0((boolean)led);
+    	}
+    	IfxStdIf_DPipe_print(io, "  Led0: %4d "ENDL, IR_getLed0());
+    }
+
+    return TRUE;
+}
+
+boolean AppShell_led1(pchar args, void *data, IfxStdIf_DPipe *io)
+{
+	sint32 led;
+	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
+    {
+        IfxStdIf_DPipe_print(io, "  Syntax     : l1 0/1"ENDL);
+    }
+    else
+    {
+    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
+    		IR_setLed1((boolean)led);
+    	}
+    	IfxStdIf_DPipe_print(io, "  Led1: %4d "ENDL, IR_getLed1());
+    }
+
+    return TRUE;
+}
+
+boolean AppShell_led2(pchar args, void *data, IfxStdIf_DPipe *io)
+{
+	sint32 led;
+	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
+    {
+        IfxStdIf_DPipe_print(io, "  Syntax     : l2 0/1"ENDL);
+    }
+    else
+    {
+    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
+    		IR_setLed2((boolean)led);
+    	}
+    	IfxStdIf_DPipe_print(io, "  Led2: %4d "ENDL, IR_getLed2());
+    }
+
+    return TRUE;
+}
 
 /** \brief Handle the 'status' command
  *
@@ -224,30 +368,37 @@ void initSerialInterface(void)
 {
     {   /** - Serial interface */
         IfxAsclin_Asc_Config config;
-        IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN0);
+
+		#if BOARD == APPLICATION_KIT_TC237
+			IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN0);
+		#elif BOARD == SHIELD_BUDDY
+			IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN3);
+		#endif
         config.baudrate.baudrate             = CFG_ASC0_BAUDRATE;
         config.baudrate.oversampling         = IfxAsclin_OversamplingFactor_16;
         config.bitTiming.medianFilter        = IfxAsclin_SamplesPerBit_three;
         config.bitTiming.samplePointPosition = IfxAsclin_SamplePointPosition_8;
-        config.interrupt.rxPriority          = ISR_PRIORITY(INTERRUPT_ASC_0_RX);
-        config.interrupt.txPriority          = ISR_PRIORITY(INTERRUPT_ASC_0_TX);
-        config.interrupt.erPriority          = ISR_PRIORITY(INTERRUPT_ASC_0_EX);
+		#if BOARD == APPLICATION_KIT_TC237
+			/* ISR priorities and interrupt target */
+			config.interrupt.txPriority    = ISR_PRIORITY_ASC_0_TX;
+			config.interrupt.rxPriority    = ISR_PRIORITY_ASC_0_RX;
+			config.interrupt.erPriority    = ISR_PRIORITY_ASC_0_EX;
+		#elif BOARD == SHIELD_BUDDY
+			config.interrupt.txPriority    = ISR_PRIORITY_ASC_3_TX;
+			config.interrupt.rxPriority    = ISR_PRIORITY_ASC_3_RX;
+			config.interrupt.erPriority    = ISR_PRIORITY_ASC_3_EX;
+		#endif
         config.interrupt.typeOfService       = ISR_PROVIDER_ASC_0;
         IfxAsclin_Asc_Pins ascPins = {
-            .cts       = NULL_PTR,
-            .ctsMode   = IfxPort_InputMode_noPullDevice,
-#if BOARD == APPLICATION_KIT_TC237
-            .rx        = &IfxAsclin0_RXA_P14_1_IN,
-            .tx        = &IfxAsclin0_TX_P14_0_OUT,
-#elif BOARD == SHIELD_BUDDY
-            .rx        = &IfxAsclin0_RXB_P15_3_IN,
-            .tx        = &IfxAsclin0_TX_P15_2_OUT,
-#endif
-			.rxMode    = IfxPort_InputMode_noPullDevice,
-            .rts       = NULL_PTR,
-            .rtsMode   = IfxPort_OutputMode_pushPull,
-            .txMode    = IfxPort_OutputMode_pushPull,
-            .pinDriver = IfxPort_PadDriver_cmosAutomotiveSpeed1
+                    .cts       = NULL_PTR,
+                    .ctsMode   = IfxPort_InputMode_noPullDevice,
+                    .rx        = &SHELL_RX,
+                    .rxMode    = IfxPort_InputMode_noPullDevice,
+                    .rts       = NULL_PTR,
+                    .rtsMode   = IfxPort_OutputMode_pushPull,
+                    .tx        = &SHELL_TX,
+                    .txMode    = IfxPort_OutputMode_pushPull,
+                    .pinDriver = IfxPort_PadDriver_cmosAutomotiveSpeed1
         };
         config.pins         = &ascPins;
         config.rxBuffer     = g_AsclinShellInterface.ascBuffer.rx;

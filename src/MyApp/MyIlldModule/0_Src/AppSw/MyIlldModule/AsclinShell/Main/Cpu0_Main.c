@@ -74,12 +74,12 @@ int core0_main(void)
     IfxCpu_enableInterrupts();
 
     /* Demo init */
-    AsclinShellInterface_init();
+    BasicStm_init();
 
     /* background endless loop */
     while (TRUE)
     {
-        AsclinShellInterface_run();
+    	BasicStm_run();
 
         REGRESSION_RUN_STOP_PASS;
     }

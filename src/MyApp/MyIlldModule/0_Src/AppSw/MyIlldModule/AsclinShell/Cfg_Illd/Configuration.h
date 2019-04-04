@@ -33,7 +33,7 @@
 /******************************************************************************/
 #include "Ifx_Cfg.h"
 #include "ConfigurationIsr.h"
-
+#include "ifxPort_PinMap.h"
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
 /******************************************************************************/
@@ -41,6 +41,9 @@
 #define APPLICATION_KIT_TC237 1
 #define SHIELD_BUDDY 2
 
+#define ASCLIN0			0		// For HC06 Bluetooth module
+#define ASCLIN3			3		// For USB
+#define SHELL_ASCLIN	ASCLIN3
 
 /** \addtogroup IfxLld_Demo_AsclinShellInterface_SrcDoc_Config
  * \{ */
@@ -56,6 +59,35 @@
  * \name Macros for Regression Runs
  * \{
  */
+
+#if BOARD == APPLICATION_KIT_TC237
+	#define LED_TICK					IfxPort_P13_0
+	#define LED0						IfxPort_P13_1
+	#define LED1						IfxPort_P13_2
+	#define LED2						IfxPort_P13_3
+
+	#define PORT00_0					IfxPort_P00_0
+	#define PORT00_1					IfxPort_P00_1
+
+	#define SHELL_RX        IfxAsclin0_RXA_P14_1_IN
+	#define SHELL_TX        IfxAsclin0_TX_P14_0_OUT
+
+#elif BOARD == SHIELD_BUDDY
+	#define LED_TICK					IfxPort_P10_2
+	#define LED0						IfxPort_P00_4
+	#define LED1						IfxPort_P00_3
+	#define LED2						IfxPort_P00_2
+
+	#define PORT00_0					IfxPort_P00_0
+	#define PORT00_1					IfxPort_P00_1
+
+	#define SHELL_RX        IfxAsclin3_RXD_P32_2_IN
+	#define SHELL_TX        IfxAsclin3_TX_P15_7_OUT
+
+
+#endif
+
+
 
 #ifndef REGRESSION_RUN_STOP_PASS
 #define REGRESSION_RUN_STOP_PASS

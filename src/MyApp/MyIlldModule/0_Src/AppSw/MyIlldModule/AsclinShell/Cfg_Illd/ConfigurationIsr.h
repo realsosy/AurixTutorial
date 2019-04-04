@@ -50,10 +50,17 @@
  * The interrupt priority range is [1,255]
  * \{
  */
+#define ISR_PRIORITY_STM_INT0       40
+#define ISR_PROVIDER_STM_INT0       IfxSrc_Tos_cpu0
+#define INTERRUPT_STM_INT0          ISR_ASSIGN(ISR_PRIORITY_STM_INT0, ISR_PROVIDER_STM_INT0)
 
 #define ISR_PRIORITY_ASC_0_RX 4         /**< \brief Define the ASC0 receive interrupt priority.  */
-#define ISR_PRIORITY_ASC_0_TX 8         /**< \brief Define the ASC0 transmit interrupt priority.  */
-#define ISR_PRIORITY_ASC_0_EX 12        /**< \brief Define the ASC0 error interrupt priority.  */
+#define ISR_PRIORITY_ASC_0_TX 5         /**< \brief Define the ASC0 transmit interrupt priority.  */
+#define ISR_PRIORITY_ASC_0_EX 6        /**< \brief Define the ASC0 error interrupt priority.  */
+
+#define ISR_PRIORITY_ASC_3_RX 10         /**< \brief Define the ASC3 receive interrupt priority.  */
+#define ISR_PRIORITY_ASC_3_TX 11         /**< \brief Define the ASC3 transmit interrupt priority.  */
+#define ISR_PRIORITY_ASC_3_EX 12        /**< \brief Define the ASC3 error interrupt priority.  */
 
 /** \} */
 
@@ -62,17 +69,20 @@
  * \{ */
 
 #define ISR_PROVIDER_ASC_0    IfxSrc_Tos_cpu0         /**< \brief Define the ASC0 interrupt provider.  */
+#define ISR_PROVIDER_ASC_3    IfxSrc_Tos_cpu0         /**< \brief Define the ASC0 interrupt provider.  */
 
 /** \} */
 
 /**
  * \name Interrupt configuration.
  * \{ */
-
 #define INTERRUPT_ASC_0_RX    ISR_ASSIGN(ISR_PRIORITY_ASC_0_RX, ISR_PROVIDER_ASC_0)                 /**< \brief Define the ASC0 receive interrupt priority.  */
 #define INTERRUPT_ASC_0_TX    ISR_ASSIGN(ISR_PRIORITY_ASC_0_TX, ISR_PROVIDER_ASC_0)                 /**< \brief Define the ASC0 transmit interrupt priority.  */
 #define INTERRUPT_ASC_0_EX    ISR_ASSIGN(ISR_PRIORITY_ASC_0_EX, ISR_PROVIDER_ASC_0)                 /**< \brief Define the ASC0 error interrupt priority.  */
 
+#define INTERRUPT_ASC_3_RX    ISR_ASSIGN(ISR_PRIORITY_ASC_3_RX, ISR_PROVIDER_ASC_3)                 /**< \brief Define the ASC0 receive interrupt priority.  */
+#define INTERRUPT_ASC_3_TX    ISR_ASSIGN(ISR_PRIORITY_ASC_3_TX, ISR_PROVIDER_ASC_3)                 /**< \brief Define the ASC0 transmit interrupt priority.  */
+#define INTERRUPT_ASC_3_EX    ISR_ASSIGN(ISR_PRIORITY_ASC_3_EX, ISR_PROVIDER_ASC_3)                 /**< \brief Define the ASC0 error interrupt priority.  */
 /** \} */
 
 /** \} */
