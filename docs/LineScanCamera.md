@@ -1,7 +1,7 @@
 ---
 title: Line Scan Camera.md
-author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)
-date: 2018-05-08
+author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com) / Kyunghan Min (kyunghah.min@gmail.com)
+date: 2019-04-04
 ---
 
 # Line Scan Camera (Optional)
@@ -38,11 +38,12 @@ date: 2018-05-08
 ## References
 
 * TSL1401CL Data sheet
-* iLLD_TC23A Help / Modules/ VADC
+* iLLD_1_0_1_8_0_TC2xx_Drivers_And_Demos_Release - Modules/ VADC
 
 **[Example Code]**
 
-* InfineonRacer_TC23A - TestLineScan
+* AurixRacer_TC23A - TestLineScan
+* AurixRacer_TC27D - TestLineScan
 
 ------
 
@@ -108,17 +109,28 @@ SI의 rising edge에서 이전 사이클에서 계측된 128 pixels 정보를 AO
 ### Pin Configuration
 
 * InfineonRacer 플랫폼 내 Configuration.h 파일을 보면  Line scan camera의 출력을 계측하는 analog channel이 9, 10 으로 설정되어 있습니다. 따라서, 2개의 Line scan camera를 사용할 수 있습니다. 또한, SI와 CLK 입력을 생성하기 위한 I/O가 각각 아래와 같이 설정되어 있습니다. SI와 CLK는 보통 주기적 신호로 내보내지기 때문에 타이머 모듈로 출력을 내보낼 수도 있습니다. 본 예제에서는 I/O와 time delay로 clock 신호를 만들어 주었습니다.
+  * TC27D의 경우 analog channel이 0,1 로 설정되어 있습니다.
 ```c
 // in Configuration.h
+// AK 237
 #define TSL1401_SI					IfxPort_P14_6
 #define TSL1401_CLK					IfxPort_P14_7
 #define TSL1401_AO_1				9
 #define TSL1401_AO_2				10
+// SB 275
+#define TSL1401_SI					IfxPort_P14_0
+#define TSL1401_CLK					IfxPort_P14_1
+#define TSL1401_AO_1				0
+#define TSL1401_AO_2				1
 ```
 
 * 그리고, TC237 보드의 schematics 에서 analog channel 9, 10은 아래 pin에 mapping 되어 있습니다. 따라서, Line scan camera의 AO 출력을 아래 pin 중 한 곳에 연결시켜주어야 합니다. 
 
 ![MyOwnCheapOscilloscope_ADCLinescanPort](images/LineScanCamera_ADCLinescanPort.jpg)
+
+* TC 275 보드는 아래와 같이 analog channel 0,1의 pin에 연결해 줍니다.
+
+![LineScanCamera_ADCLinescanPort_SB](images/LineScanCamera_ADCLinescanPort_SB.png)
 
 * 주의할 점은 보드에서 ADC 값을 확인하기 전에  AO를 실제 오실로스코프로 확인하여 정상적인 전압 파형이 나오는 지 확인합니다. 만약, 전압 파형이 정상적으로 나오지 않는다면, line scan camera의 전원이 제대로 공급되는 지 확인하거나 배선에 문제가 없는 다시 한번 확인합니다. 최종적으로 전압 파형이 정상적으로 나오는 것을 확인 한 후 해당 pin에 연결합니다.
 
@@ -293,7 +305,7 @@ void BasicLineScan_run(void)
 
     * 주기가 크면 광량을 수집하는 시간이 길어지므로 어두운 곳에서도 측정 가능 합니다.
 
-    ​
+​    
 
 ------
 
