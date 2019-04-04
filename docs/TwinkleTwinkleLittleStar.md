@@ -66,6 +66,7 @@ AURIX - related
 * 64-bit timer of 32-bit microcontroller
     - TC237이 한 번의 명령어로 다룰 수 있는 데이터량은 32 bit 이며,
   	- 하나의 레지스터에는 최대 2^32의 *Tick* 을 누적시킬 수 있다.
+
     - STM은 복수의 32-bit 레지스터를 사용하여 *Tick* 의 누적허용량을 늘리면서,
     - 더욱 유연하게 동작할 수 있는 시스템 타이머이다.
     - *Tick* 은 일정한 주기(*f_stm*)에 따라 자동으로 값이 더해져 증가한다.(Free-running)
@@ -98,45 +99,40 @@ iLLD - related
 ### Module Configuration
 
 * 시스템 타이머에 누적되는 Tick을 이용하여 주기적으로 LED를 제어하고자 한다.
-- 이를 위해 제어하고자 하는 LED와 연결된 IO port를 사용할수 있도록 해주고,
-- Compare register를 이용해 특정 주기마다 인터럽트를 발생시킬 것이다.
+  - 이를 위해 제어하고자 하는 LED와 연결된 IO port를 사용할수 있도록 해주고,
+  * Compare register를 이용해 특정 주기마다 인터럽트를 발생시킬 것이다.
 
-* LED port 정의
-```c
-BOARD == SHIELD_BUDDY
-// in AppSw\Tricore\Cfg_Illd\Configuration.h
-#define LED_TICK					IfxPort_P33_3 // 사용할 IO port 정의
-```
+* LED port 정의 및 초기화
 
-```c
-BOARD == APPLICATION_KIT_TC237
-// in AppSw\Tricore\Cfg_Illd\Configuration.h
-#define LED_TICK					IfxPort_P13_0 // 사용할 IO port 정의
-```
-
-
+  * SB_TC27D 와 AK_TC23A 가 사용하는 IO port 가 다르기 때문에 각각 정의해 준 후 LED 제어를 위해 port를 output으로 사용할 수 있도록 초기화 시켜준다 
 ```c
 // in StmDemo.c
-void IfxStmDemo_init(void)
+static void IfxBlinkLed_Init(void)
 {
-	// ...
-    initTime();
-
-    g_Stm.stmSfr = &MODULE_STM0;
-    IfxStm_initCompareConfig(&g_Stm.stmConfig);
-
-    g_Stm.stmConfig.triggerPriority = ISR_PRIORITY_STM_INT0;
-    g_Stm.stmConfig.typeOfService   = IfxSrc_Tos_cpu0;
-    g_Stm.stmConfig.ticks           = TimeConst_1s;
-
-    IfxStm_initCompare(g_Stm.stmSfr, &g_Stm.stmConfig);
-	// ...
+#if BOARD == APPLICATION_KIT_TC237
+    IfxPort_setPinMode(&MODULE_P13, 0, IfxPort_Mode_outputPushPullGeneral);
+#elif BOARD == SHIELD_BUDDY
+    IfxPort_setPinMode(&MODULE_P10, 2, IfxPort_Mode_outputPushPullGeneral);
+#endif
 }
 ```
 
-* 이 때 각 구조체 변수들의 의미를 알아야 하는데,
+* STM 사용을 위한 변수 정의
+  * STM 관련 설정 값들을 관리할 수 있는 variable을 정의한다
+  * STM configuration 변수는 각 target iLLD에 정의되어 있다
+  * 아래 정의된 STM configuration 변수에 설정된 값들을 STM register에  iLLD interface를 통해 할당한다
+
 ```c
-//in StmDemo.h
+// in StmDemo.h
+typedef struct
+{
+    Ifx_STM             *stmSfr;            // STM register 변수
+    IfxStm_CompareConfig stmConfig;         // Register configuration 변수
+    volatile uint8       LedBlink;          /**< \brief LED state variable */
+    volatile uint32      counter;           /**< \brief interrupt counter */
+} App_Stm;
+
+// in BaseSw\iLLD\TC23A(TC27D)\Tricore\Stm\Std\IfxStm.h
 typedef struct
 {
     IfxStm_Comparator          comparator;             // 사용할 compare register의 번호
@@ -149,80 +145,95 @@ typedef struct
 } IfxStm_CompareConfig;
 ```
 
-* 이 중 ticks를 수정하여 인터럽트 flag를 발생시킬 주기를 결정한다. (아래 BSP에 정의된 변수 사용)
+* Compare interrupt 초기화
+  * STM configuration 변수 값들을 결정해 주고
+  * STM을 통해서 발생하는 interrupt 관련 초기화를 해준다
+  * 이 중 ticks를 수정하여 인터럽트 flag를 발생시킬 주기를 결정한다. (아래 BSP에 정의된 변수 사용)
 
-### Interrupt Configuration
-* Tick 값이 compare register의 값과 같아졌을때 발생하는 인터럽트에 관한 설정
+
 ```c
-// in ConfigurationIsr.h
-#define ISR_PRIORITY_STM_INT0       40
-#define ISR_PROVIDER_STM_INT0       IfxSrc_Tos_cpu0    
-#define INTERRUPT_STM_INT0          ISR_ASSIGN(ISR_PRIORITY_STM_INT0, ISR_PROVIDER_STM_INT0)
-
 // in StmDemo.c
-IFX_INTERRUPT(STM_Int0Handler, 0, ISR_PRIORITY_STM_INT0);
+void IfxStmDemo_init(void)
+{
+    printf("IfxStmDemo_init() called\n");
+
+    /* disable interrupts */
+    boolean interruptState = IfxCpu_disableInterrupts();
+
+    g_Stm.LedBlink = 0;
+    g_Stm.counter  = 0;
+
+    initTime();
+    
+    // Stm register 변수에 module0 register 할당
+    g_Stm.stmSfr = &MODULE_STM0;
+    // Register configuration 변수 설정
+    IfxStm_initCompareConfig(&g_Stm.stmConfig);
+
+    g_Stm.stmConfig.triggerPriority = ISR_PRIORITY_STM_INT0;
+    g_Stm.stmConfig.typeOfService   = IfxSrc_Tos_cpu0;
+#ifdef SIMULATION
+    g_SrcSwInt.stmConfig.ticks      = 1000;
+#else
+    g_Stm.stmConfig.ticks           = TimeConst_1s;
+#endif
+    IfxStm_initCompare(g_Stm.stmSfr, &g_Stm.stmConfig);
+
+    IfxBlinkLed_Init();
+
+    /* enable interrupts again */
+    IfxCpu_restoreInterrupts(interruptState);
+}
 ```
 
 
 ### Module Behavior
 
 * Timer register에 누적된 *Tick* 값이 compare register의 값과 같아진다면 인터럽트가 한 번 발생한다.
+* 인터럽트가 발생하면 정의된 인터럽트 handler function을 구동한다.
 
-- 이 인터럽트를 일정 주기로 실행시키기 위해서는 compare를 반복시킬 필요가 있다.
+```c
+// in StmDemo.c
+IFX_INTERRUPT(STM_Int0Handler, 0, ISR_PRIORITY_STM_INT0); // STM_Int0Handler 실행
+```
 
-* 때문에 인터럽트가 발생할 때 마다 compare register의 값을 주기만큼 증가시킬 것이며,
-
-- 이것은 인터럽트의 handler function을 통해 구현된다.
+* 인터럽트를 일정 주기로 실행시키기 위해서는 compare를 반복시기 위해서 인터럽트 발생시마다 compare register의 값을 주기만큼 증가
+  * Interrupt flag를 reset하고, `IfxStm_clearCompareFlag`
+  * Compare register의 값을 주기만큼 더해주며,  `IfxStm_increaseCompare`
+  * Interrupt를 다시 활성화한다. `IfxCpu_enableInterrupts`
+* 그 후 LED blink function 실행하고 `IfxBlinkLed_Task`,
+* 각각 다른주기마다 task를 실행 하는 [Static Cycle Scheduler](./MultipleInfiniteLoops.md)을 위해 `g_Stm.counter` 를 관리한다.
 
 
 ```c
 // in StmDemo.c
+
+// Interrupt handler function
 void STM_Int0Handler(void)
 {
     IfxStm_clearCompareFlag(g_Stm.stmSfr, g_Stm.stmConfig.comparator);
-    IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, TimeConst_1s);
+#ifdef SIMULATION
+	IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, 1000);
+#else
+	IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, TimeConst_1s);
+#endif
     IfxCpu_enableInterrupts();
     IfxBlinkLed_Task();
 }
-```
 
-* Handler 함수는 실행되자마자 다음 interrupt를 준비한다.	 
-	1. Interrupt flag를 reset하고, `IfxStm_clearCompareFlag`
-	2. Compare register의 값을 주기만큼 더해주며,  `IfxStm_increaseCompare`
-	3. Interrupt를 다시 활성화한다. `IfxCpu_enableInterrupts`
-
-- 이후 `IfxBlinkLed_Task`함수를 통해 LED를 제어한다.
-
-```c
-// in StmDemo.c
+// LED blink function
 static void IfxBlinkLed_Task(void)
 {
-    // ^=는 XOR의 개념, 실행할 때 마다 LED의 state를 바꾸고 counter를 올림
-
     g_Stm.LedBlink ^= 1;
 
+#if BOARD == APPLICATION_KIT_TC237
     setOutputPin(&MODULE_P13, 0, g_Stm.LedBlink);
-
+#elif BOARD == SHIELD_BUDDY
+    setOutputPin(&MODULE_P10, 2, g_Stm.LedBlink);
+#endif
     g_Stm.counter++;
 }
-
 ```
-
-
-* 이 때 누적시키는 `counter`값을 이용해 스케쥴러를 구성하면 병렬적인 시간처리가 가능해진다.
-
-```c
-// in StmDemo.c
-void IfxStmDemo_run(void)
-{
-    // 아직은 아무 기능도 하고 있지 않다.
-
-    while (g_Stm.counter < 10)
-    {}
-}
-```
-
-
 
 ### BSP (Board support package)
 
@@ -281,10 +292,9 @@ void initTime(void)
 ### [Exercise 2] 인터럽트 발생 주기를 1msec로
 
 * 인터럽트 발생 주기를 1msec 로 변경해 봅시다.
-* LED107은 5Hz로 점멸시킵니다.  LED108은 0.5Hz로 점멸시킵니다.
 * 프로그래밍 가이드
   * ISR(`STM_Int0Handler(void)`)에서 직접 LED를 점멸하는 대신  `g_Stm.counter`를 1씩 증가 시킵니다.
-  * `IfxStmDemo_run(void)` 함수에서 `g_Stm.counter` 값을 살펴보면서 100 이 될 때마다 LED107 Toggle 함수를 호출하고, 1000 이 될 때마다  LED108 Toggle 함수를 호출하도록 합니다.
+  * `IfxStmDemo_run(void)` 함수에서 `g_Stm.counter` 값을 살펴보면서 100 이 될 때마다 LED blink 함수를 호출합니다.
 * **[중요]**
   * 위와 같은 방식으로 프로그래밍 하는 것이 스케쥴러의 기본 아이디어 입니다.  
   * 여기서 가장 기본이 되는 주기적 증가 카운터, 이 예에서는 `g_Stm.counter` 를 Tick 이라 부르며, 시계의 초침과 같은 역할을 합니다.
