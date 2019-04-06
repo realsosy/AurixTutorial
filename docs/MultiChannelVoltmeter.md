@@ -1,7 +1,7 @@
 ---
 title: Multi channel voltmeter.md
 author: Wootaik Lee (wootaik@gmail.com) / Kyunghan Min (kyunghah.min@gmail.com) / Hyunki Shin (HyunkiShin66@gmail.com)
-date: 2018-05-01
+date: 2019-04-06
 ---
 
 # Multi channel voltmeter
@@ -32,12 +32,16 @@ AURIX의 VADC는 위의 두가지 사항을 충실하게 지원해 주고 있습
 ## References
 
 * TC23x TC22x Family User's Manual v1.1 - Chap27 VADC
-* iLLD_TC23A_1_0_1_4_0 - Modules/iLLD/VADC
+* TC27xD-step User's Manual v2.2 - Chap28 VADC
+* iLLD_TC23A_1_0_1_8_0 - Modules/iLLD/VADC
 
 **[Example Code]**
 
-* MyIlldModule_TC23A - VadcBackgoundScan
-* InfineonRacer_TC23A - TestVadcBgScan
+* MyIlldModule_AK_TC23A - VadcBackgroundScan
+* MyIlldModule_SB_TC27D - VadcBackgroundScan
+
+* AurixRacer_AK_TC23A - TestVadcBgScan
+* AurixRacer_SB_TC27D - TestVadcBgScan
 
 -----
 
@@ -119,18 +123,16 @@ AURIX의 VADC는 위의 두가지 사항을 충실하게 지원해 주고 있습
 //in VadcBackgroundScanDemo.c
 void VadcBackgroundScanDemo_init(void)
 {
-    // ADC module configuration 초기화
+    // ADC module configuration 생성
     IfxVadc_Adc_Config adcConfig;
     IfxVadc_Adc_initModuleConfig(&adcConfig, &MODULE_VADC);
     IfxVadc_Adc_initModule(&g_VadcBackgroundScan.vadc, &adcConfig);
 
-
-
-    // ADC configuration을 바탕으로 Group configuration 구조체화
+    // ADC module 초기화
     IfxVadc_Adc_GroupConfig adcGroupConfig;
     IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &g_VadcBackgroundScan.vadc);
 
-    // Group 0에 관련된 세부 설정 세팅
+    // 사용할 Group 0에 관련된 세부 설정 세팅
     adcGroupConfig.groupId = IfxVadc_GroupId_0;
     adcGroupConfig.master  = adcGroupConfig.groupId;
 
@@ -146,34 +148,32 @@ void VadcBackgroundScanDemo_init(void)
     // 변경된 설정을 적용하기 위해 다시 초기화
     IfxVadc_Adc_initGroup(&g_VadcBackgroundScan.adcGroup, &adcGroupConfig);
 
+    // Background scan에 2채널을 추가
+    uint32                    chnIx;
 
-    // channel configuration
-    uint32 chnIx;
+    // create channel config
+    IfxVadc_Adc_ChannelConfig adcChannelConfig[2];
 
-	// 구조체화 하여 세부설정 세팅
-	IfxVadc_Adc_ChannelConfig adcChannelConfig[2];
+    for (chnIx = 0; chnIx < 2; ++chnIx)
+    {
+       IfxVadc_Adc_initChannelConfig(&adcChannelConfig[chnIx], &g_VadcBackgroundScan.adcGroup);
 
-	// 2개의 Channel에 각각 세팅
-	for (chnIx = 0; chnIx < 2; ++chnIx)
-	{
-		IfxVadc_Adc_initChannelConfig(&adcChannelConfig[chnIx], &g_VadcBackgroundScan.adcGroup);
+       adcChannelConfig[chnIx].channelId         = (IfxVadc_ChannelId)(0 + chnIx);
+       adcChannelConfig[chnIx].resultRegister    = (IfxVadc_ChannelResult)(0 + chnIx); // use register #0 and 1 for results
+       adcChannelConfig[chnIx].backgroundChannel = TRUE;
 
-		adcChannelConfig[chnIx].channelId         = (IfxVadc_ChannelId)(0 + chnIx);
-		adcChannelConfig[chnIx].resultRegister    = (IfxVadc_ChannelResult)(0 + chnIx); // use register #0 and 1 for results
-		adcChannelConfig[chnIx].backgroundChannel = TRUE;
+       // 채널 초기화
+       IfxVadc_Adc_initChannel(&adcChannel[chnIx], &adcChannelConfig[chnIx]);
 
-		// Channel configuration 초기화
-		IfxVadc_Adc_initChannel(&adcChannel[chnIx], &adcChannelConfig[chnIx]);
+       // background scan에 추가
+       unsigned channels = (1 << adcChannelConfig[chnIx].channelId);
+       unsigned mask     = channels;
+       IfxVadc_Adc_setBackgroundScan(&g_VadcBackgroundScan.vadc, &g_VadcBackgroundScan.adcGroup, channels, mask);
+    }
 
-		// background scan에 추가
-		unsigned channels = (1 << adcChannelConfig[chnIx].channelId);
-		unsigned mask     = channels;
-		IfxVadc_Adc_setBackgroundScan(&g_VadcBackgroundScan.vadc, &g_VadcBackgroundScan.adcGroup, channels, mask);
-	}
-
-	// start scan
-	IfxVadc_Adc_startBackgroundScan(&g_VadcBackgroundScan.vadc);
-}
+    // start scan
+    IfxVadc_Adc_startBackgroundScan(&g_VadcBackgroundScan.vadc);
+    }
 
 ```
 
@@ -181,9 +181,9 @@ void VadcBackgroundScanDemo_init(void)
 
 ### Interrupt Configuration
 
-* Background 스캔은 ADC 동작을 모두 자동으로 실행하도록 설정
+* 모듈 설정을 통해 ADC 동작을 모두 자동으로 실행하도록 설정
     * 그러므로 ADC 변환과 관련해서 인터럽트를 발생해서 실행해야 하는 동작은 없음
-    * 사용자의 필요에 의해서 추가적으로 인터럽트를 발생시킬 수는 있음
+    * 사용자의 필요에 의해서 추가적으로 인터럽트를 발생시킬 수는 있다
 
 
 ### Module Behavior
@@ -241,21 +241,33 @@ return 0;
 
 ## 추가적인 설명
 
-### In InfineonRacer; TestVadcBgScan
+### In AurixRacer; TestVadcBgScan
 
-* AN15, 16, 20, 21에서 들어오는 input을 사용할 것이다.
-- Board에는 이미 pin과 converter가 맵핑되어있다.
+* 각 보드에서 사용할 Analog source는 다음과 같다
+  * TC237: AN15, 16, 20, 21
+  * TC275: AN4, 5, 6, 7
+- 각 Board에는 이 source에 맞는 pin과 converter가 맵핑되어있다.
 * User manual을 통해 사용해야하는 group과 channel을 확인
+  * TC237
+  ![MultiChannelVoltmeter_Pin_237](images/MultiChannelVoltmeter_Pin_237.png)
 
-![MultiChannelVoltmeter_Pin](images/MultiChannelVoltmeter_Pin.png)
+  * TC275
+  ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.png)
 
 * Channel configuration 초기화 때 이 설정값을 입력
 
 ```c
 // in BasicVadcBgScan.c
+#if BOARD == APPLICATION_KIT_TC237
 static uint32 adcChannelNum[ADC_CHN_MAX] = {
 		3, 4, 8, 9  // AN15, AN16, AN20, AN21
 };
+#elif BOARD == SHIELD_BUDDY
+static uint32 adcChannelNum[ADC_CHN_MAX] = {
+		4, 5, 6, 7 // AN15, AN16, AN20, AN21
+};
+#endif
+
 
 for (chnIx = 0; chnIx < ADC_CHN_MAX; ++chnIx)
 {
@@ -293,26 +305,6 @@ void BasicVadcBgScan_run(void)
         }
 }
 ```
-* 스케쥴러를 이용해 1초마다 결과를 출력한다
-
-```c
-// in AppTaskFu.c
-void appTaskfu_1000ms(void)
-{
-	task_cnt_1000m++;
-	if(task_cnt_1000m == 1000){
-		task_cnt_1000m = 0;
-	}
-	IfxStdIf_DPipe_print(&g_AsclinShellInterface.stdIf.asc, "  Vadc [0, 4095]");
-	IfxStdIf_DPipe_print(&g_AsclinShellInterface.stdIf.asc, "  Ch15: %5d,",(uint32) (IR_getChn15()*4096));
-	IfxStdIf_DPipe_print(&g_AsclinShellInterface.stdIf.asc, "  Ch16: %5d,",(uint32) (IR_getChn16()*4096));
-	IfxStdIf_DPipe_print(&g_AsclinShellInterface.stdIf.asc, "  Ch20: %5d,",(uint32) (IR_getChn20()*4096));
-	IfxStdIf_DPipe_print(&g_AsclinShellInterface.stdIf.asc, "  Ch21: %5d"ENDL,(uint32) (IR_getChn21()*4096));
-}
-```
-* Data pipe를 이용하므로 터미널을 통해 확인할 수 있다.
-
-![MultiChannelVoltmeter_InfineonRacer](images/MultiChannelVoltmeter_InfineonRacer.png)
 
 
 ------
