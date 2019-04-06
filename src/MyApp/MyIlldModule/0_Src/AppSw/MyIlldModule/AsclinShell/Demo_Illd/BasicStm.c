@@ -1,5 +1,5 @@
 /**
- * \file BasicStm.c
++ * \file BasicStm.c
  * \brief BasicStm
  *
  * \version InfineonRacer 1_0_0
@@ -13,7 +13,6 @@
 
 #include "Configuration.h"
 #include "BasicStm.h"
-#include "AppTaskFu.h"
 #include "Configuration.h"
 
 /******************************************************************************/
@@ -40,10 +39,12 @@ typedef struct
 /******************************************************************************/
 
 Basic_Stm g_Stm; /**< \brief Stm global data */
+boolean Blink_flag = FALSE;
+
 /******************************************************************************/
 /*-------------------------Function Prototypes--------------------------------*/
 /******************************************************************************/
-static void BlinkLed_run(void);
+static void BlinkLed_run(boolean Blink_flag);
 static void BlinkLed_init(void);
 /******************************************************************************/
 /*------------------------Private Variables/Constants-------------------------*/
@@ -82,20 +83,17 @@ void STM_Int0Handler(void)
     	g_Stm.counter = 0;
     }
 
-    task_flag_1m = TRUE;
 
     if(g_Stm.counter % 10 == 0){
-    	task_flag_10m = TRUE;
+
     }
     if(g_Stm.counter % 100 == 0){
-        task_flag_100m = TRUE;
-        BlinkLed_run();
+
+        BlinkLed_run(Blink_flag);
     }
     if(g_Stm.counter % 1000 == 0){
-        task_flag_1000m = TRUE;
-    }
 
-    appIsrCb_1ms();
+    }
 
 }
 
@@ -105,18 +103,24 @@ void STM_Int0Handler(void)
  * This function blinks the LED connected to P 33.6 and counts the number
  *	of times the interrupt occurs.
  */
-static void BlinkLed_run(void)
+static void BlinkLed_run(boolean BlinkFlag)
 {
-    g_Stm.LedBlink ^= 1;
-    if (g_Stm.LedBlink == TRUE)
-    {
-        IfxPort_setPinState(LED_TICK.port, LED_TICK.pinIndex, IfxPort_State_high);
-    }
-    else
-    {
-        IfxPort_setPinState(LED_TICK.port, LED_TICK.pinIndex, IfxPort_State_low);
-    }
-
+	if (BlinkFlag == TRUE)
+	{
+		g_Stm.LedBlink ^= 1;
+		if (g_Stm.LedBlink == TRUE)
+		{
+			IfxPort_setPinState(LED_TICK.port, LED_TICK.pinIndex, IfxPort_State_high);
+		}
+		else
+		{
+			IfxPort_setPinState(LED_TICK.port, LED_TICK.pinIndex, IfxPort_State_low);
+		}
+	}
+	else
+	{
+		IfxPort_setPinState(LED_TICK.port, LED_TICK.pinIndex, IfxPort_State_low);
+	}
 }
 
 
@@ -163,8 +167,6 @@ void BasicStm_init(void)
 
     BlinkLed_init();
 
-    appTaskfu_init();
-
     /* enable interrupts again */
     IfxCpu_restoreInterrupts(interruptState);
 }
@@ -174,28 +176,13 @@ void BasicStm_init(void)
  *
  * This function is called from main, background loop
  */
-void BasicStm_run(void)
-{
-//    printf("BasicStm_run() called\n");
-	if(task_flag_1m == TRUE){
-		appTaskfu_1ms();
-		task_flag_1m = FALSE;
+
+
+
+void IR_setLedTick(boolean led){
+	if(led != FALSE){
+		led = TRUE;
 	}
 
-	if(task_flag_10m == TRUE){
-		appTaskfu_10ms();
-		task_flag_10m = FALSE;
-	}
-
-	if(task_flag_100m == TRUE){
-		appTaskfu_100ms();
-		task_flag_100m = FALSE;
-	}
-
-	if(task_flag_1000m == TRUE){
-		appTaskfu_1000ms();
-		task_flag_1000m = FALSE;
-	}
-
-	appTaskfu_idle();
+	Blink_flag = led;
 }
