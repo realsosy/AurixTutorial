@@ -1,7 +1,7 @@
 ---
 title: My own terminal
 author: Wootaik Lee (wootaik@gmail.com) / Kyunghan Min (kyunghah.min@gmail.com) / Hyunki Shin (HyunkiShin66@gmail.com)
-date: 2018-04-25
+date: 2019-04-03
 ---
 
 # My own terminal
@@ -32,16 +32,16 @@ Window 의 cmd과 powershell, Linux의 sh, bash 같은 텍스트 기반의 사�
 
 ## References
 
-* iLLD_TC23A_1_0_1_4_0 - Modules/Service software/System Engineering/Communication/Shell
-* iLLD_TC23A_1_0_1_4_0 - Modules/Service software/Standard interface: Data Pipe
+* iLLD_TC23A_1_0_1_8_0 - Modules/Service software/System Engineering/Communication/Shell
+* iLLD_TC23A_1_0_1_8_0 - Modules/Service software/Standard interface: Data Pipe
+* iLLD_TC27D_1_0_1_8_0 - Modules/Service software/System Engineering/Communication/Shell
+* iLLD_TC27D_1_0_1_8_0 - Modules/Service software/Standard interface: Data Pipe
 * [Hello World](./HelloWorld.md)
 
 **[Example Code]**
 
-* MyIlldModule_TC23A - AsclinShell
-* InfineonRacer_TC23A - TestShellInterface
-
-
+* MyIlldModule_AK_TC23A - AsclinShell
+* MyIlldModule_SB_TC27D - AsclinShell
 
 
 ## Example Description
@@ -49,8 +49,9 @@ Window 의 cmd과 powershell, Linux의 sh, bash 같은 텍스트 기반의 사�
 다음의 기능을 수행하는 쉘을 구성한다.
 
 * Booting 시, 혹은 "info"  명령 입력시 초기화면을 출력한다.
-* "status" 명령 입력시 시스템의 정보를 출력한다.
-* "help" 명령 입력시 도움말을 출력한다.
+* " status " 명령 입력시 시스템의 정보를 출력한다.
+* " led " 명령 입력으로 Led blinking 기능을 제어한다.
+* " help " 명령 입력시 도움말을 출력한다.
 
 
 
@@ -88,28 +89,29 @@ Window 의 cmd과 powershell, Linux의 sh, bash 같은 텍스트 기반의 사�
 ### Shell 개요
 
 - 통신을 이용하여 사용자가 입력하는 명령을 확인하고 이에 대응되는 명령을 수행
-    * Call-back 함수인 command를 정의하여 명령을 수행할 것이다.
-    * Data pipe를 통하여 사용자가 입력하는 명령어를 수신하고 그것이 아는 명령일 때,
+    * Call-back 함수인 command를 정의하여 명령을 수행한다.
+    * Data pipe를 통하여 입력되는 명령어를 수신하고 그것이 사전에 정의된 명령일 때,
     * 미리 정의된 command에 따라서 대응대는 동작을 행한다.
 
 
 * Command
     * Callback 함수로 구현되며,
-    * {이름(call), 도움말, &data, &handler} 의 형태로 정의,
-    * Shell을 통해 들어온 data가 call을 만족할 때 handler함수를 실행하는 구조.
+    * {이름(call), 도움말, &data, &handler} 의 형태로 정의되어,
+    * Shell을 통해 들어온 data가 call을 만족할 때 handler함수를 실행하는 구조
 
 
 - 예를들어,
-    * 사용자가 shell을 통해 "help"라는 입력을 준다면,
-    * Data-pipe interface를 통하여 그 입력을 수신 : ```g_AsclinShellInterface```
-     * 그 후 정의된 "help"에 맞는 handler 함수를 수행 : ```Ifx_Shell_showHelp```
+    * 사용자가 shell을 동작시키고 "info"라는 입력을 준다면,
+    * 입력된 데이터와 사전 정의된 command를 비교하다가: ```g_AsclinShellInterface```
+    * 사전정의된 "info"라는 명령어가 입력된 것을 확인하면 그에 맞는 handler 함수를 수행 : ```AppShell_info```
 
 
 ```c
   // in AsclinShellInterface.c
   const Ifx_Shell_Command AppShell_commands[] = {
       {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
-      {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
+      {"info",   "   : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
+      {"led", "      : Change the led blinking state", &g_AsclinShellInterface,       &AppShell_led,    },
       {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
       IFX_SHELL_COMMAND_LIST_END
   };
@@ -119,7 +121,7 @@ Window 의 cmd과 powershell, Linux의 sh, bash 같은 텍스트 기반의 사�
 
 ![MyOwnTerminal_CommandInfo](images/MyOwnTerminal_CommandInfo.png)
 
-* "help" command를 입력하면 설정된 함수에 의해 다음과 같이 표시된다.
+* "help" command를 입력하면 설정된 함수에 의해 다음과 같이 정의된 command에 대한 설명들이 표시된다.
 
 ![MyOwnTerminal_CommandHelp](images/MyOwnTerminal_CommandHelp.png)
 
@@ -137,7 +139,28 @@ void initSerialInterface(void)
 {
     {
         IfxAsclin_Asc_Config config;
-        IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN0);
+
+        // TC237의 경우 ASCLIN0, shield buddy의 경우 ASCLIN3을 사용
+
+        #if BOARD == APPLICATION_KIT_TC237
+          IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN0);
+        #elif BOARD == SHIELD_BUDDY
+          IfxAsclin_Asc_initModuleConfig(&config, &MODULE_ASCLIN3);
+        #endif
+          config.baudrate.baudrate             = CFG_ASC0_BAUDRATE;
+          config.baudrate.oversampling         = IfxAsclin_OversamplingFactor_16;
+          config.bitTiming.medianFilter        = IfxAsclin_SamplesPerBit_three;
+          config.bitTiming.samplePointPosition = IfxAsclin_SamplePointPosition_8;
+
+        #if BOARD == APPLICATION_KIT_TC237        
+          config.interrupt.txPriority    = ISR_PRIORITY_ASC_0_TX;
+          config.interrupt.rxPriority    = ISR_PRIORITY_ASC_0_RX;
+          config.interrupt.erPriority    = ISR_PRIORITY_ASC_0_EX;
+        #elif BOARD == SHIELD_BUDDY
+          config.interrupt.txPriority    = ISR_PRIORITY_ASC_3_TX;
+          config.interrupt.rxPriority    = ISR_PRIORITY_ASC_3_RX;
+          config.interrupt.erPriority    = ISR_PRIORITY_ASC_3_EX;
+        #endif
 
 	// 중간 생략
 
@@ -179,21 +202,46 @@ void AsclinShellInterface_init(void)
 
 ### Interrupt Configuration
 
-* 인터럽트가 일어나면 data pipe 모듈을 통해 처리
+* 인터럽트를 보드에 맞게 설정된 통신 채널에 따라 설정
 
 ```c
 // in AsclinShellInterface.c
-IFX_INTERRUPT(ISR_Asc_0_rx, 0, ISR_PRIORITY_ASC_0_RX);
 
-void ISR_Asc_0_rx(void)
+#if BOARD == APPLICATION_KIT_TC237
+
+IFX_INTERRUPT(asclin0TxISR, 0, ISR_PRIORITY_ASC_0_TX)
 {
-    IfxCpu_enableInterrupts();
-    IfxStdIf_DPipe_onReceive(&g_AsclinShellInterface.stdIf.asc);
+    IfxAsclin_Asc_isrTransmit(&g_AsclinShellInterface.drivers.asc);
 }
 
-// rx 인터럽트와 유사
-IFX_INTERRUPT(ISR_Asc_0_tx, 0, ISR_PRIORITY_ASC_0_TX);
-IFX_INTERRUPT(ISR_Asc_0_ex, 0, ISR_PRIORITY_ASC_0_EX);
+IFX_INTERRUPT(asclin0RxISR, 0, ISR_PRIORITY_ASC_0_RX)
+{
+    IfxAsclin_Asc_isrReceive(&g_AsclinShellInterface.drivers.asc);
+}
+
+IFX_INTERRUPT(asclin0ErISR, 0, ISR_PRIORITY_ASC_0_EX)
+{
+    IfxAsclin_Asc_isrError(&g_AsclinShellInterface.drivers.asc);
+}
+
+#elif BOARD == SHIELD_BUDDY
+
+IFX_INTERRUPT(asclin3TxISR, 0, ISR_PRIORITY_ASC_3_TX)
+{
+    IfxAsclin_Asc_isrTransmit(&g_AsclinShellInterface.drivers.asc);
+}
+
+IFX_INTERRUPT(asclin3RxISR, 0, ISR_PRIORITY_ASC_3_RX)
+{
+    IfxAsclin_Asc_isrReceive(&g_AsclinShellInterface.drivers.asc);
+}
+
+IFX_INTERRUPT(asclin3ErISR, 0, ISR_PRIORITY_ASC_3_EX)
+{
+    IfxAsclin_Asc_isrError(&g_AsclinShellInterface.drivers.asc);
+}
+
+
 ```
 
 
@@ -217,83 +265,90 @@ void AsclinShellInterface_run(void)
 
 ## 추가적인 설명
 
-### In InfineonRacer; TestShellInterface
+### LED blinking command 추가
 
-* STM을 바탕으로 스케줄러를 구성하고 idle 시간에 shell interface를 동작
+* 기본 Shell demo code에는 없는 led 제어에 대한 command를 추가해보자
+  * 이전에 진행했던 STM을 바탕으로 led blinking 기능을 추가하고,
+  * Shell을 통해 기능의 on/off signal을 송신.
 
+1. STM의 blinking code에 on/off 동작을 수행할 flag를 추가
 ```c
 //in BasicStm.c
-void BasicStm_run(void)
+boolean Blink_flag = FALSE;
+
+  // 중간생략
+
+void STM_Int0Handler(void)
 {
+    IfxStm_clearCompareFlag(g_Stm.stmSfr, g_Stm.stmConfig.comparator);
+#ifdef SIMULATION
+	IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, 1000);
+#else
+	IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, TimeConst_100ms);
+#endif
+    IfxCpu_enableInterrupts();
 
-	if(task_flag_1m == TRUE){
-		appTaskfu_1ms();
-		task_flag_1m = FALSE;
-	}
-
-	if(task_flag_10m == TRUE){
-		appTaskfu_10ms();
-		task_flag_10m = FALSE;
-	}
-
-	if(task_flag_100m == TRUE){
-		appTaskfu_100ms();
-		task_flag_100m = FALSE;
-	}
-
-	if(task_flag_1000m == TRUE){
-		appTaskfu_1000ms();
-		task_flag_1000m = FALSE;
-	}
-
-	appTaskfu_idle();
-
+    BlinkLed_run(Blink_flag);
 }
 
-//in AppTaskFu.c
-void appTaskfu_idle(void){
+//in BasicStm.h
 
-    AsclinShellInterface_run();
+  // 중간생략
+IFX_EXTERN boolean Blink_flag;
 
-}
 ```
 
-* 연결된 차량의 state를 관측할 수 있는 shell command를 구성
-    * 예를 들어 차량의 servo motor angle을 확인하려면
-    * "srv"라는 command를 shell을 통해 입력하면 된다.
-    * 미리 구성된 ```AppShell_srv```를 통하여 servo motor angle을 출력
+2. blinking flag에 접근하는 extern 함수를 추가
+```c
+//in BasicStm.c
+  // 중간생략
+void IR_setLedTick(boolean led){
+	if(led != FALSE){
+		led = TRUE;
+	}
 
+	Blink_flag = led;
+}
+
+//in BasicStm.h
+IFX_EXTERN void IR_setLedTick(boolean led);
+
+```
+
+3. 원하는 기능을 구현하는 shell command를 구성
+    * callback 함수를 동작시킬 command를 정의하고,
+    * 그 command가 입력되었을 때 기능을 수행할 함수를 구성
 
 ```c
 //in AsclinShellInterface.c
 const Ifx_Shell_Command AppShell_commands[] = {
 	// 중간 생략
 
-    {"srv", "      : Servo Angle", &g_AsclinShellInterface, &AppShell_srv,    },
+    {"led", " : Change the led blinking state", &g_AsclinShellInterface, &AppShell_led,  },
 
 	// 중간 생략
 };
 
-boolean AppShell_srv(pchar args, void *data, IfxStdIf_DPipe *io)
+boolean AppShell_led(pchar args, void *data, IfxStdIf_DPipe *io)
 {
-	float32 vol;
+	sint32 led;
 	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
     {
-        IfxStdIf_DPipe_print(io, "  Syntax     : srv frac-value"ENDL);
+        IfxStdIf_DPipe_print(io, "  Syntax     : Led tick 0/1"ENDL);
     }
     else
     {
-    	if(Ifx_Shell_parseFloat32(&args, &vol) == TRUE){
-    		IR_setSrvAngle(vol);
+    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
+    		IR_setLedTick((boolean)led);
     	}
-    	IfxStdIf_DPipe_print(io, "  SrvAngle: %4.2f fraction"ENDL, IR_getSrvAngle());
+    	IfxStdIf_DPipe_print(io, "  Led tick: %4d "ENDL, Blink_flag);
     }
 
     return TRUE;
-
 }
 
 ```
+* 이러한 기능을 잘 이용한다면 차량의 내부 상태를 shell을 이용해 관측할 수도 있지 않을까?
 * 그렇다면 차량의 analog 데이터는 어떤 식으로 board 안으로 들어오는 것이지?
 
 - 답은 앞으로 진행할 예제들을 통해 얻을 수 있다.

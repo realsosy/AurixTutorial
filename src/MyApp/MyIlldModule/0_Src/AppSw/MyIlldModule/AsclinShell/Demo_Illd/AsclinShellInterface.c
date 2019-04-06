@@ -73,7 +73,7 @@ boolean AppShell_led(pchar args, void *data, IfxStdIf_DPipe *io);
 const Ifx_Shell_Command AppShell_commands[] = {
     {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
     {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
-	{"led", "       : Change the led blinking state", &g_AsclinShellInterface,       &AppShell_led,    },
+	{"led", "      : Change the led blinking state", &g_AsclinShellInterface,       &AppShell_led,    },
     {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
     IFX_SHELL_COMMAND_LIST_END
 };
@@ -174,43 +174,6 @@ IFX_INTERRUPT(asclin3ErISR, 0, ISR_PRIORITY_ASC_3_EX)
  * - This interrupt is raised each time a data have been received on the serial interface.
  *   and Asc_If_receiveIrq() will be called
  */
-void ISR_Asc_0_rx(void)
-{
-    IfxCpu_enableInterrupts();
-    IfxStdIf_DPipe_onReceive(&g_AsclinShellInterface.stdIf.asc);
-}
-
-
-/** \brief Handle Asc0 Tx interrupt
- *
- * \isrProvider \ref ISR_PROVIDER_ASC_0
- * \isrPriority \ref ISR_PRIORITY_ASC_0_TX
- *
- * - Configuration of this interrupt is done by Asc_If_init()
- * - This interrupt is raised each time the serial interface transmit buffer get empty
- *   and Asc_If_transmitIrq() will be called
- */
-void ISR_Asc_0_tx(void)
-{
-    IfxCpu_enableInterrupts();
-    IfxStdIf_DPipe_onTransmit(&g_AsclinShellInterface.stdIf.asc);
-}
-
-
-/** \brief Handle Asc0 Ex interrupt.
- *
- * \isrProvider \ref ISR_PROVIDER_ASC_0
- * \isrPriority \ref ISR_PRIORITY_ASC_0_EX
- *
- * - Configuration of this interrupt is done by Asc_If_init()
- * - This interrupt is raised each time an error occurs on the serial interface and
- *   Asc_If_errorIrq() will be called.
- */
-void ISR_Asc_0_ex(void)
-{
-    IfxCpu_enableInterrupts();
-    IfxStdIf_DPipe_onError(&g_AsclinShellInterface.stdIf.asc);
-}
 
 
 /** \addtogroup IfxLld_Demo_AsclinShellInterface_SrcDoc_Main_Interrupt
