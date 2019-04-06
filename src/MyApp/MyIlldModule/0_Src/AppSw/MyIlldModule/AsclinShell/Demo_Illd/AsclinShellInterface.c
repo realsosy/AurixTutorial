@@ -30,7 +30,6 @@
 #include "IfxLldVersion.h"
 #include "_Impl/IfxGlobal_cfg.h"
 #include "Cpu0_Main.h"
-#include "BasicPort.h"
 
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
@@ -61,9 +60,7 @@ App_AsclinShellInterface g_AsclinShellInterface; /**< \brief Demo information */
 
 boolean AppShell_status(pchar args, void *data, IfxStdIf_DPipe *io);
 boolean AppShell_info(pchar args, void *data, IfxStdIf_DPipe *io);
-boolean AppShell_led0(pchar args, void *data, IfxStdIf_DPipe *io);
-boolean AppShell_led1(pchar args, void *data, IfxStdIf_DPipe *io);
-boolean AppShell_led2(pchar args, void *data, IfxStdIf_DPipe *io);
+boolean AppShell_led(pchar args, void *data, IfxStdIf_DPipe *io);
 
 /******************************************************************************/
 /*------------------------Private Variables/Constants-------------------------*/
@@ -71,29 +68,16 @@ boolean AppShell_led2(pchar args, void *data, IfxStdIf_DPipe *io);
 
 /** \brief Application shell command list */
 
-#if BOARD == APPLICATION_KIT_TC237
+
 /** \brief Application shell command list */
 const Ifx_Shell_Command AppShell_commands[] = {
     {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
     {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
-	{"l108", "       : LED 108", &g_AsclinShellInterface,       &AppShell_led0,    },
-	{"l109", "       : LED 109", &g_AsclinShellInterface,       &AppShell_led1,    },
-	{"l110", "       : LED 110", &g_AsclinShellInterface,       &AppShell_led2,    },
+	{"led", "       : Change the led blinking state", &g_AsclinShellInterface,       &AppShell_led,    },
     {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
     IFX_SHELL_COMMAND_LIST_END
 };
-#elif BOARD == SHIELD_BUDDY
-/** \brief Application shell command list */
-const Ifx_Shell_Command AppShell_commands[] = {
-    {"status", "   : Show the application status", &g_AsclinShellInterface,       &AppShell_status,    },
-    {"info",   "     : Show the welcome screen",   &g_AsclinShellInterface,       &AppShell_info,      },
-	{"l0", "       : LED 0", &g_AsclinShellInterface,       &AppShell_led0,    },
-	{"l1", "       : LED 1", &g_AsclinShellInterface,       &AppShell_led1,    },
-	{"l2", "       : LED 2", &g_AsclinShellInterface,       &AppShell_led2,    },
-    {"help",   SHELL_HELP_DESCRIPTION_TEXT,        &g_AsclinShellInterface.shell, &Ifx_Shell_showHelp, },
-    IFX_SHELL_COMMAND_LIST_END
-};
-#endif
+
 
 /******************************************************************************/
 /*-------------------------Function Implementations---------------------------*/
@@ -281,59 +265,24 @@ boolean AppShell_info(pchar args, void *data, IfxStdIf_DPipe *io)
     return TRUE;
 }
 
-boolean AppShell_led0(pchar args, void *data, IfxStdIf_DPipe *io)
+boolean AppShell_led(pchar args, void *data, IfxStdIf_DPipe *io)
 {
 	sint32 led;
 	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
     {
-        IfxStdIf_DPipe_print(io, "  Syntax     : l0 0/1"ENDL);
+        IfxStdIf_DPipe_print(io, "  Syntax     : Led tick 0/1"ENDL);
     }
     else
     {
     	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
-    		IR_setLed0((boolean)led);
+    		IR_setLedTick((boolean)led);
     	}
-    	IfxStdIf_DPipe_print(io, "  Led0: %4d "ENDL, IR_getLed0());
+    	IfxStdIf_DPipe_print(io, "  Led tick: %4d "ENDL, Blink_flag);
     }
 
     return TRUE;
 }
 
-boolean AppShell_led1(pchar args, void *data, IfxStdIf_DPipe *io)
-{
-	sint32 led;
-	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
-    {
-        IfxStdIf_DPipe_print(io, "  Syntax     : l1 0/1"ENDL);
-    }
-    else
-    {
-    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
-    		IR_setLed1((boolean)led);
-    	}
-    	IfxStdIf_DPipe_print(io, "  Led1: %4d "ENDL, IR_getLed1());
-    }
-
-    return TRUE;
-}
-
-boolean AppShell_led2(pchar args, void *data, IfxStdIf_DPipe *io)
-{
-	sint32 led;
-	if (Ifx_Shell_matchToken(&args, "?") != FALSE)
-    {
-        IfxStdIf_DPipe_print(io, "  Syntax     : l2 0/1"ENDL);
-    }
-    else
-    {
-    	if(Ifx_Shell_parseSInt32(&args, &led) != FALSE){
-    		IR_setLed2((boolean)led);
-    	}
-    	IfxStdIf_DPipe_print(io, "  Led2: %4d "ENDL, IR_getLed2());
-    }
-
-    return TRUE;
-}
 
 /** \brief Handle the 'status' command
  *

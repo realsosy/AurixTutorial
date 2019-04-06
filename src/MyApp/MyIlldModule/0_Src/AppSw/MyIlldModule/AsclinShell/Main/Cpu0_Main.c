@@ -75,11 +75,12 @@ int core0_main(void)
 
     /* Demo init */
     BasicStm_init();
+    AsclinShellInterface_init();
 
     /* background endless loop */
     while (TRUE)
     {
-    	BasicStm_run();
+    	AsclinShellInterface_run();
 
         REGRESSION_RUN_STOP_PASS;
     }

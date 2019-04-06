@@ -39,6 +39,7 @@
 #include "SysSe/Comm/Ifx_Console.h"
 #include "SysSe/Comm/Ifx_Shell.h"
 #include "Asclin/Asc/IfxAsclin_Asc.h"
+#include "BasicStm.h"
 
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
