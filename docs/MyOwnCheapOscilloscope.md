@@ -6,7 +6,7 @@ date: 2019-04-08
 
 # My own cheap oscilloscope
 
-**Pre-requisite**: [Multi channel voltmeter](./docs/MultiChannelVoltmeter.md)  
+**Pre-requisite**: [Multi channel voltmeter](../docs/MultiChannelVoltmeter.md)  
 
 
 
