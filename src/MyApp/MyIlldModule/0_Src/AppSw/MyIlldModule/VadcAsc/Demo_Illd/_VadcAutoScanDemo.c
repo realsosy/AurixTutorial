@@ -48,6 +48,7 @@ App_VadcAutoScan g_VadcAutoScan; /**< \brief Demo information */
 
 IfxVadc_Adc_Channel       adcChannel[4];
 
+
 /******************************************************************************/
 /*-------------------------Function Prototypes--------------------------------*/
 /******************************************************************************/
@@ -80,7 +81,12 @@ void VadcAutoScanDemo_init(void)
     IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &g_VadcAutoScan.vadc);
 
     /* with group 0 */
+#if BOARD == APPLICATION_KIT_TC237
     adcGroupConfig.groupId = IfxVadc_GroupId_0;
+#elif BOARD == SHIELD_BUDDY
+    adcGroupConfig.groupId = IfxVadc_GroupId_1;
+#endif
+
     adcGroupConfig.master  = adcGroupConfig.groupId;
 
     /* enable scan source */

@@ -148,7 +148,7 @@ void VadcAutoScanDemo_run(void)
 		volatile uint32 actual = conversionResult.B.RESULT;
 		/* print result, check with expected value */
 		{
-//			printf("Group %d Channel %d : %u\n", group, channel, actual);
+			printf("Group %d Channel %d : %u\n", group, channel, actual);
 		}
 	}
 }

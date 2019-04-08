@@ -39,9 +39,8 @@ AURIX의 VADC는 위의 두가지 사항을 충실하게 지원해 주고 있습
 
 * MyIlldModule_AK_TC23A - VadcBackgroundScan
 * MyIlldModule_SB_TC27D - VadcBackgroundScan
-
-* AurixRacer_AK_TC23A - TestVadcBgScan
-* AurixRacer_SB_TC27D - TestVadcBgScan
+- AurixRacer_AK_TC23A - TestVadcBgScan
+- AurixRacer_SB_TC27D - TestVadcBgScan
 
 -----
 
@@ -245,14 +244,14 @@ return 0;
 
 * 각 보드에서 사용할 Analog source는 다음과 같다
   * TC237: AN15, 16, 20, 21
-  * TC275: AN4, 5, 6, 7
+  * TC275: AN44, 45, 46, 47
 - 각 Board에는 이 source에 맞는 pin과 converter가 맵핑되어있다.
 * User manual을 통해 사용해야하는 group과 channel을 확인
   * TC237
   ![MultiChannelVoltmeter_Pin_237](images/MultiChannelVoltmeter_Pin_237.png)
 
   * TC275
-  ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.png)
+  ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
 
 * Channel configuration 초기화 때 이 설정값을 입력
 
@@ -264,7 +263,7 @@ static uint32 adcChannelNum[ADC_CHN_MAX] = {
 };
 #elif BOARD == SHIELD_BUDDY
 static uint32 adcChannelNum[ADC_CHN_MAX] = {
-		4, 5, 6, 7 // AN15, AN16, AN20, AN21
+		4, 5, 6, 7 // AN44, AN45, AN46, AN47
 };
 #endif
 

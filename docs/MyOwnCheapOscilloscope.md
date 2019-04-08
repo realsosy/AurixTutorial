@@ -1,7 +1,7 @@
 ---
 title: My own cheap oscilloscope.md
-author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)  
-date: 2018-05-04
+author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)   / Hyunki Shin(HyunkiShin66@gmail.com)
+date: 2019-04-08
 ---
 
 # My own cheap oscilloscope
@@ -37,12 +37,15 @@ Converter 가 하나의 채널만 변환해야 할 경우에는 이 문제를 �
 ## References
 
 * TC23x TC22x Family User's Manual v1.1 - Chap27 VADC
-* iLLD_TC23A Help / Modules/ VADC
+* TC27xD-step User's Manual v2.2 - Chap28 VADC
+* iLLD_TC23A_1_0_1_8_0 - Modules/iLLD/VADC
 
 **[Example Code]**
 
-* MyIlldModule_TC23A - VadcAutoScan, VadcAsc
-* InfineonRacer_TC23A - X
+* MyIlldModule_AK_TC23A - VadcAutoScan
+* MyIlldModule_SB_TC27D - VadcAutoScan
+- MyIlldModule_AK_TC23A - VadcAsc
+- MyIlldModule_SB_TC27D - VadcAsc
 
 ------
 
@@ -185,20 +188,17 @@ Converter 가 하나의 채널만 변환해야 할 경우에는 이 문제를 �
 
   * Auto scan 기능을 이용하여 ADC변환 후 해당 그룹, 채널,그리고 변환된 실제 값을 출력합니다.
 
-  
+
 
 ### Module Configuration
 
-* 상위단에서 하위단까지 단계별 설정이 필요
-  1. ADC configuration
-  2. Group configuration
-  3. Channel configuration
-* 설정은 개별적인 구조체와 계측적인 명명법을 사용한 method로 구분하여 구현되어 있다.
+* 기본적인 설정 구조는 이전 장과 같음
+* 그러나 이번엔 Background scan이 아닌 Auto scan을 enable 시켜볼 것
 
 ```c
 void VadcAutoScanDemo_init(void)
 {
-    /* VADC Configuration */
+    // VADC Configuration
 
 	// ADC module configuration 생성
     IfxVadc_Adc_Config adcConfig;
@@ -207,7 +207,7 @@ void VadcAutoScanDemo_init(void)
     // ADC module configuration 초기화
     IfxVadc_Adc_initModule(&g_VadcAutoScan.vadc, &adcConfig);
 
-    // Group configuration 구조체화
+    // Group configuration 초기화
     IfxVadc_Adc_GroupConfig adcGroupConfig;
     IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &g_VadcAutoScan.vadc);
 
@@ -215,13 +215,13 @@ void VadcAutoScanDemo_init(void)
     adcGroupConfig.groupId = IfxVadc_GroupId_0;
     adcGroupConfig.master  = adcGroupConfig.groupId;
 
-    /* enable scan source */
+    // enable scan source
     adcGroupConfig.arbiter.requestSlotScanEnabled = TRUE;
 
     // Auto scan enable 설정
     adcGroupConfig.scanRequest.autoscanEnabled = TRUE;
 
-    /* enable all gates in "always" mode (no edge detection) */
+    // enable all gates in "always" mode (no edge detection)
     adcGroupConfig.scanRequest.triggerConfig.gatingMode = IfxVadc_GatingMode_always;
 
     // 변경된 설정을 적용하기 위해 다시 초기화
@@ -239,18 +239,18 @@ void VadcAutoScanDemo_init(void)
 
       	// Channel configuration 설정
         adcChannelConfig[chnIx].channelId      = (IfxVadc_ChannelId)(chnIx);
-        adcChannelConfig[chnIx].resultRegister = (IfxVadc_ChannelResult)(chnIx);  /* use dedicated result register */
+        adcChannelConfig[chnIx].resultRegister = (IfxVadc_ChannelResult)(chnIx);  // use dedicated result register
 
         // 변경된 설정을 적용하기 위해 다시 초기화
         IfxVadc_Adc_initChannel(&adcChannel[chnIx], &adcChannelConfig[chnIx]);
 
-        /* add to scan */
+        // add to scan
         unsigned channels = (1 << adcChannelConfig[chnIx].channelId);
         unsigned mask     = channels;
         IfxVadc_Adc_setScan(&g_VadcAutoScan.adcGroup, channels, mask);
     }
 
-    /* start autoscan */
+    //start autoscan
     IfxVadc_Adc_startScan(&g_VadcAutoScan.adcGroup);
 
 }
@@ -277,13 +277,13 @@ void VadcAutoScanDemo_run(void)
 
     uint32                    chnIx;
 
-	/* check results */
+	// check results
 	for (chnIx = 0; chnIx < 4; ++chnIx)
 	{
 		volatile unsigned     group   = adcChannel[chnIx].group->groupId;
 		volatile unsigned     channel = adcChannel[chnIx].channel;
 
-		/* wait for valid result */
+		// wait for valid result
 		Ifx_VADC_RES conversionResult;
 
 		do
@@ -292,9 +292,9 @@ void VadcAutoScanDemo_run(void)
 		} while (!conversionResult.B.VF);	// conversionResult.B.VF; 유효데이터임을 알려주는 valid flag
 
 		volatile uint32 actual = conversionResult.B.RESULT;
-		/* print result, check with expected value */
+		//print result, check with expected value
 		{
-			/* FIXME result verification pending ?? */
+			// FIXME result verification pending
 			printf("Group %d Channel %d : %u\n", group, channel, actual);
 		}
 	}
@@ -307,11 +307,11 @@ void VadcAutoScanDemo_run(void)
 int core0_main(void)
 {
 	// ... 중간 생략
-    /* Demo init */
+    // Demo init
     VadcAutoScanDemo_init();
 
     initTime(); // Initialize time constants
-    /* background endless loop */
+    // background endless loop
     while (TRUE)
     {
     	VadcAutoScanDemo_run();
@@ -339,45 +339,163 @@ int core0_main(void)
 * Vadc 외에 필요한 것들
   * Graphic display: SerialPlot
   * Serial 통신: AsclinAsc Example
-  * 주기적 동작: Stm Example 
+  * 주기적 동작: Stm Example
 * Oscilloscope 처럼 파형을 출력하기 위해서는 Graphic 출력 화면이 필요합니다.  이 경우 PC Monitor를 사용하면 저렴하게 구성할 수도 있을 뿐더러 Open Source로 진행되고 있는 여러 프로젝트들 중에 선택하여 사용할 수도 있습니다.   PC에 직렬 통신으로 전송되어 오는 Data를 다양하게 출력할 수 있는 프로그램으로 SerialPlot 이라는 것이 있습니다.  이 프로그램을 사용하려면 직렬 통신으로 Data를 전송할 수 있어야 합니다.  Hello World 의 AsclinAsc 프로젝트에서 직렬통신으로 Data를 전송하고 수신하는 방법을 소개하였습니다.  이 기능들을 합치면 Oscilloscope 를 만들 수 있습니다.
+
 
 #### Module Configuration
 
 * AsclinAscDemo
     - 직렬통신에 필요한 초기화 설정기능 활용
+    - MyOwnTerminal에서 진행했던 것과 같이 보드에 맞는 통신채널을 설정
+```c
+// in _AsclinAscDemo.c
+  // Interrupt install; TC237의 경우 ASCLIN0 사용
+#if BOARD == APPLICATION_KIT_TC237
+  IFX_INTERRUPT(asclin0TxISR, 0, ISR_PRIORITY_ASC_0_TX)
+  {
+      IfxAsclin_Asc_isrTransmit(&g_AsclinAsc.drivers.asc);
+  }
+
+  IFX_INTERRUPT(asclin0RxISR, 0, ISR_PRIORITY_ASC_0_RX)
+  {
+      IfxAsclin_Asc_isrReceive(&g_AsclinAsc.drivers.asc);
+  }
+
+  IFX_INTERRUPT(asclin0ErISR, 0, ISR_PRIORITY_ASC_0_EX)
+  {
+      IfxAsclin_Asc_isrError(&g_AsclinAsc.drivers.asc);
+  }
+
+  // TC275의 경우 ASCLIN3 사용
+#elif BOARD == SHIELD_BUDDY
+  IFX_INTERRUPT(asclin3TxISR, 0, ISR_PRIORITY_ASC_3_TX)
+  {
+      IfxAsclin_Asc_isrTransmit(&g_AsclinAsc.drivers.asc);
+  }
+
+  IFX_INTERRUPT(asclin3RxISR, 0, ISR_PRIORITY_ASC_3_RX)
+  {
+      IfxAsclin_Asc_isrReceive(&g_AsclinAsc.drivers.asc);
+  }
+
+  IFX_INTERRUPT(asclin3ErISR, 0, ISR_PRIORITY_ASC_3_EX)
+  {
+      IfxAsclin_Asc_isrError(&g_AsclinAsc.drivers.asc);
+  }
+#endif
+
+  // 중간생략
+void AsclinAscDemo_init(void)
+{
+  // 중간생략
+  // 직렬통신 및 interrupt priority 설정
+#if BOARD == APPLICATION_KIT_TC237
+    IfxAsclin_Asc_initModuleConfig(&ascConfig, &MODULE_ASCLIN0);
+#elif BOARD == SHIELD_BUDDY
+    IfxAsclin_Asc_initModuleConfig(&ascConfig, &MODULE_ASCLIN3);
+#endif
+
+#if BOARD == APPLICATION_KIT_TC237
+    ascConfig.interrupt.txPriority    = ISR_PRIORITY_ASC_0_TX;
+    ascConfig.interrupt.rxPriority    = ISR_PRIORITY_ASC_0_RX;
+    ascConfig.interrupt.erPriority    = ISR_PRIORITY_ASC_0_EX;
+#elif BOARD == SHIELD_BUDDY
+    ascConfig.interrupt.txPriority    = ISR_PRIORITY_ASC_3_TX;
+    ascConfig.interrupt.rxPriority    = ISR_PRIORITY_ASC_3_RX;
+    ascConfig.interrupt.erPriority    = ISR_PRIORITY_ASC_3_EX;
+#endif
+    ascConfig.interrupt.typeOfService = (IfxSrc_Tos)IfxCpu_getCoreIndex();
+
+    // 중간생략
+    // pin configuration
+#if BOARD == APPLICATION_KIT_TC237
+    const IfxAsclin_Asc_Pins pins = {
+        NULL_PTR,                     IfxPort_InputMode_pullUp,        // CTS pin not used
+        &IfxAsclin0_RXA_P14_1_IN, IfxPort_InputMode_pullUp,        // Rx pin
+        NULL_PTR,                     IfxPort_OutputMode_pushPull,     // RTS pin not used
+        &IfxAsclin0_TX_P14_0_OUT, IfxPort_OutputMode_pushPull,     // Tx pin
+        IfxPort_PadDriver_cmosAutomotiveSpeed1
+    };
+#elif BOARD == SHIELD_BUDDY
+    const IfxAsclin_Asc_Pins pins = {
+        NULL_PTR,                     IfxPort_InputMode_pullUp,        
+        &IfxAsclin3_RXD_P32_2_IN, IfxPort_InputMode_pullUp,   
+        NULL_PTR,                     IfxPort_OutputMode_pushPull,  
+        &IfxAsclin3_TX_P15_7_OUT, IfxPort_OutputMode_pushPull,    
+        IfxPort_PadDriver_cmosAutomotiveSpeed1
+    };
+#endif
+```
+
+
 * VadcAutoScanDemo
     - 4채널 변환 설정 초기화 설정기능과 각 채널의 변환값 읽어오기 기능 활용
+    - VADC 초기화 과정에서 원하는 source를 input pin으로 설정
     - 결과를 지역변수가 아니라 전역변수로 읽어올 수 있도록 수정
 ```c
-// in VadcAutoScanDemo.h 
+// in _VadcAutoScanDemo.h
 typedef struct
 {
-    IfxVadc_Adc vadc; /* VADC handle */
+    IfxVadc_Adc vadc; // VADC handle
     IfxVadc_Adc_Group adcGroup;
     uint16 adcValue[4];  // 결과값을 넣어 놓을 변수
 } App_VadcAutoScan;
 ```
+```c
+void VadcAutoScanDemo_init(void)
+{
+    // 중간생략
+
+    // 그룹 설정
+#if BOARD == APPLICATION_KIT_TC237
+    adcGroupConfig.groupId = IfxVadc_GroupId_0; // 237의 경우 Group0
+#elif BOARD == SHIELD_BUDDY
+    adcGroupConfig.groupId = IfxVadc_GroupId_1; // 275의 경우 Group1
+#endif
+
+    // 중간생략
+
+    // 채널 설정
+    for (chnIx = 0; chnIx < 4; ++chnIx)
+{
+    IfxVadc_Adc_initChannelConfig(&adcChannelConfig[chnIx], &g_VadcAutoScan.adcGroup);
+
+    adcChannelConfig[chnIx].channelId      = (IfxVadc_ChannelId)(chnIx);
+    adcChannelConfig[chnIx].resultRegister = (IfxVadc_ChannelResult)(chnIx);  
+
+    // 중간 생략
+
+}
+```
 
 ```c
-// in VadcAutoScanDemo.c
+// in _VadcAutoScanDemo.c
 void VadcAutoScanDemo_run(void)
 {
     uint32                    chnIx;
-	/* check results */
+	// check results
 	for (chnIx = 0; chnIx < 4; ++chnIx)
 	{
-		/* wait for valid result */
+		// wait for valid result
 		Ifx_VADC_RES conversionResult;
 		do
 		{
 			conversionResult = IfxVadc_Adc_getResult(&adcChannel[chnIx]);
 		} while (!conversionResult.B.VF);
+
 		g_VadcAutoScan.adcValue[chnIx] = conversionResult.B.RESULT;  // 변환 결과값 저장
 	}
 }
-
 ```
+
+* User manual을 통해 사용해야하는 group과 channel을 확인
+  * TC237
+  ![MyOwnCheapOsilloscope_Pin_237](images/MyOwnCheapOsilloscope_Pin_237.PNG)
+
+  * TC275
+  ![MyOwnCheapOsilloscope_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
+
 
 #### Module Behavior
 
@@ -387,18 +505,18 @@ void VadcAutoScanDemo_run(void)
 ```c
 int core0_main(void)
 {
-    /* Demo init */
+    // Demo init
     AsclinAscDemo_init();
     VadcAutoScanDemo_init();
     initTime(); // Initialize time constants
 
     g_AsclinAsc.count = 4;
-    /* background endless loop */
+    // background endless loop
     while (TRUE)
     {
     	VadcAutoScanDemo_run();
 
-        /* Copy adcValue[] to txData[] &  Transmit data */
+        // Copy adcValue[] to txData[] &  Transmit data
         g_AsclinAsc.txData[0] = (uint8) ((g_VadcAutoScan.adcValue[0] & 0xFF00) >> 8);
         g_AsclinAsc.txData[1] = (uint8) (g_VadcAutoScan.adcValue[0] & 0x00FF);
         g_AsclinAsc.txData[2] = (uint8) ((g_VadcAutoScan.adcValue[1] & 0xFF00) >> 8);
@@ -416,7 +534,9 @@ int core0_main(void)
 
 * 위와 같이 전송 데이터를 설정하면 2byte의 데이터 2개가 전송되어 오게 됩니다.
 * 각 데이터는 자료형이 `uint16`이고 각 자료는 Big Endian 으로 되어 있습니다.  (즉 lower byte 가  큰 address에 할당되는 방식)  이 설정을 맞춰 주어야 올바른 데이터 해석이 가능합니다.
-* open MyIlldModule_TC23A/tool/SerialPlot.init
+* 미리 저장되어 있는 설정치를 불러와 사용할 수도 있습니다.
+  * MyIlldModule_AK_TC23A/tool/SerialPlot.init
+  * MyIlldModule_SB_TC27D/tool/SerialPlot.init
 
 
 
@@ -427,9 +547,9 @@ int core0_main(void)
 * Function Generator를 사용하여 아래의 그림과 같이 2채널의 주기적 신호를 발생시키고 각각 Adc Channel 0 과 1 번에 연결하였습니다.
     * Function Generator Channel 1 => Adc Channel 0 에 연결
     * Function Generator Channel 2 => Adc Channel 1 에 연결
-* SerialPlot를 사용하면 직렬 통신으로 전송되어 오는 데이터를 다음의 그림과 같이 출력하여 볼 수 있습니다. 
+* SerialPlot를 사용하면 직렬 통신으로 전송되어 오는 데이터를 다음의 그림과 같이 출력하여 볼 수 있습니다.
     * 필요하다면 Snapshot으로 파형을 저장할 수도 있고
-    * Data 자체를 파일로 Record 할 수도 있습니다. 
+    * Data 자체를 파일로 Record 할 수도 있습니다.
 
 
 ![MyOwnCheapOscilloscope_WaveformGen](images/MyOwnCheapOscilloscope_WaveformGen.png)
