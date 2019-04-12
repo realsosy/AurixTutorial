@@ -200,8 +200,10 @@ date: 2019-03-21
     * 필요한 모듈만 /0_Src/BaseSw 로 복사해서 선택적으로 사용해야한다.
     * 매 프로젝트마다 필요한 파일을 찾아서 복사하기 매우 번거로우므로 iLLD 소스를 모두 복사해서 사용
     * 항후 iLLD관련 프로젝트를 만들 때 이프로젝트를 복사해서 사용한다.
-* [Action] BaseFramework_TC23A(TC27D) 를 복사해서 \_MyiLLDFramework\_TC23A(TC27D) 프로젝트 생성
-    * iLLD_1_0_1_8_0_TC23A(TC27D)/Src/BaseSw 를 통째로 _MyiLLDFramework_TC23A(TC27D)/0_Src/BaseSw 로 복사
+* [Action] 생성된_MyiLLDFramework\_TC23A(TC27D) 프로젝트에 iLLD 파일들 추가
+    * 사용하려고 하는 프로세서에 맞는 프로젝트를 선택
+    * 프로젝트내 ```/0_Src``` 폴더 생성 (대소문자 구별 유의!!!)
+    * ```_LibSrc/iLLD_1_0_1_8_0_TC23A(TC27D)/Src/BaseSw``` 를 통째로 ```_MyiLLDFramework_TC23A(TC27D)/0_Src/BaseSw``` 로 복사
     * 모든 iLLD 모듈을 사용할 수 있게 된다.
 * [Check] 프로젝트를 빌드하고 실행해 본다.
 
@@ -209,8 +211,11 @@ date: 2019-03-21
 
 * StmDemo 예제를 복사, 혹은 import, 해서 실행해 본다.
 * [Action] _MyiLLDFramwork_TC23A(TC27D) 복사해서 MyStm_TC23A(TC27D) 프로젝트를 만든다.
-    * /iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/0_Src/AppSw 밑의 파일들을 모두 복사해서 MyStm_TC23A/0_Src/AppSw 로 붙여 넣는다.
-    * /iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/Doc/ 밑의 텍스트 파일을 열어본다.  프로그램 동작에 관한 간단한 설명이 나와 있다.  
+    * 프로젝트 폴더네의 .project (PROJECT 파일)을 text editor(워드패드 추천)로 연다.
+    * 그 후 프로젝트 이름을 다음과 같이 변경한다. ```<name>MyStm_SB_TC27D</name>```
+    * iLLD demo 프로그램을 다운로드 한다.
+    * ```/iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/0_Src/AppSw``` 밑의 파일들을 모두 복사해서 ```MyStm_TC23A/0_Src/AppSw``` 로 붙여 넣는다.
+    * ```/iLLD_1_0_1_8_0_TC2xx_Demos/StmDemo/Doc/``` 밑의 텍스트 파일을 열어본다.  프로그램 동작에 관한 간단한 설명이 나와 있다.  
 * [Check] 프로젝트를 빌드하고 실행해 본다.  실행은 되고 브레이크 포인트도 동작하지만 LED가 점멸되지는 않는다.
 
 **[세째단계]** Customization
