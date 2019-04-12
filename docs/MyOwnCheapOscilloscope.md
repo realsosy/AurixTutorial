@@ -489,11 +489,13 @@ void VadcAutoScanDemo_run(void)
 }
 ```
 
-* User manual을 통해 사용해야하는 group과 channel을 확인
+* 각 Board에는 이 source에 맞는 pin과 converter가 맵핑되어있다.
   * TC237
+  메뉴얼을 통해 확인
   ![MyOwnCheapOsilloscope_Pin_237](images/MyOwnCheapOsilloscope_Pin_237.PNG)
 
   * TC275
+  아래 그림과 같이 AN10, AN11 채널을 이용
   ![MyOwnCheapOsilloscope_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
 
 

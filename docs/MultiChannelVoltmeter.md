@@ -246,12 +246,13 @@ return 0;
   * TC237: AN15, 16, 20, 21
   * TC275: AN44, 45, 46, 47
 - 각 Board에는 이 source에 맞는 pin과 converter가 맵핑되어있다.
-* User manual을 통해 사용해야하는 group과 channel을 확인
-  * TC237
-  ![MultiChannelVoltmeter_Pin_237](images/MultiChannelVoltmeter_Pin_237.png)
+  * TC237:
+    메뉴얼을 통해 확인
+    ![MultiChannelVoltmeter_Pin_237](images/MultiChannelVoltmeter_Pin_237.png)
 
   * TC275
-  ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
+   각각  DAC0, DAC1, CAN RX, CAN TX 핀을 이용
+    ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
 
 * Channel configuration 초기화 때 이 설정값을 입력
 
