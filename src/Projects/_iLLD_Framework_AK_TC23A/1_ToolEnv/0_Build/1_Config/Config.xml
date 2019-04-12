@@ -166,8 +166,6 @@
 			</tool>
 		</toolchain>
 	</architecture>
-	
-	<sourceFolder paths= "../../MyApp/MyStm/0_Src/AppSw, ../../_LibSrc/iLLD_1_0_1_8_0__TC23A/Src/, ../../_LibSrc/simio_pls"/>
-
+		
 	<specificInclude internalPaths= "*/Sfr/*, */BaseSw/*/Tricore, */BaseSw/*/Platform, */BaseSw/*/CpuGeneric" />
 </root>
