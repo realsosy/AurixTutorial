@@ -35,6 +35,7 @@
 
 #include <Vadc/Std/IfxVadc.h>
 #include <Vadc/Adc/IfxVadc_Adc.h>
+#include "IfxPort.h"
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
 /******************************************************************************/
@@ -62,5 +63,6 @@ IFX_EXTERN App_VadcBackgroundScan g_VadcBackgroundScan;
 /******************************************************************************/
 IFX_EXTERN void VadcBackgroundScanDemo_init(void);
 IFX_EXTERN void VadcBackgroundScanDemo_run(void);
+
 
 #endif

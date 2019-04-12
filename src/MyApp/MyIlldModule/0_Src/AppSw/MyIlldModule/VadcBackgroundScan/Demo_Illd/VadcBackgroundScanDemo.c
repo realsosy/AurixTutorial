@@ -47,10 +47,13 @@ App_VadcBackgroundScan g_VadcBackgroundScan; /**< \brief Demo information */
 
 IfxVadc_Adc_Channel       adcChannel[2]; // Channel config 영역 옮기면서 전역 변수로 이동
 
+boolean output_val;
 /******************************************************************************/
 /*-------------------------Function Prototypes--------------------------------*/
 /******************************************************************************/
-
+static void setOutputPin(Ifx_P *port, uint8 pin, boolean state);
+static void PortOutput_init(void);
+static void PortOutput_run(void);
 /******************************************************************************/
 /*------------------------Private Variables/Constants-------------------------*/
 /******************************************************************************/
@@ -63,6 +66,35 @@ IfxVadc_Adc_Channel       adcChannel[2]; // Channel config 영역 옮기면서 전역 변
  *
  * This function is called from main during initialization phase
  */
+
+/** \brief Port Pin State
+ *
+ * This function changes the Port Pin state
+ */
+static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
+{
+    if (state)
+    {
+        IfxPort_setPinState(port, pin, IfxPort_State_high);
+    }
+    else
+    {
+        IfxPort_setPinState(port, pin, IfxPort_State_low);
+    }
+}
+
+static void PortOutput_init(void)
+{
+	output_val = 0;
+    IfxPort_setPinMode(&MODULE_P33, 0, IfxPort_Mode_outputPushPullGeneral);
+}
+
+static void PortOutput_run(void)
+{
+	setOutputPin(&MODULE_P33, 0, output_val);
+}
+
+
 void VadcBackgroundScanDemo_init(void)
 {
     /* VADC Configuration */
@@ -129,6 +161,9 @@ void VadcBackgroundScanDemo_init(void)
 
 	/* start scan */
 	IfxVadc_Adc_startBackgroundScan(&g_VadcBackgroundScan.vadc);
+
+	/* port out init */
+	PortOutput_init();
 }
 
 
@@ -138,6 +173,7 @@ void VadcBackgroundScanDemo_init(void)
  */
 void VadcBackgroundScanDemo_run(void)
 {
+	PortOutput_run();
 //    printf("VadcBackgroundScanDemo_run() called\n");
 
 	uint32                    chnIx;
@@ -161,7 +197,7 @@ void VadcBackgroundScanDemo_run(void)
 			uint32 actual = conversionResult.B.RESULT;
 
 			/* FIXME result verification pending ?? */
-//			printf("Group %d Channel %d : %u\n", group, channel, actual);
+			printf("Group %d Channel %d : %u\n", group, channel, actual);
 		}
 	}
 
