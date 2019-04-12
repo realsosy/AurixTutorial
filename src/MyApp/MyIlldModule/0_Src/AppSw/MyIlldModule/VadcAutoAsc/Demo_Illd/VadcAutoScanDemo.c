@@ -25,7 +25,7 @@
 /*----------------------------------Includes----------------------------------*/
 /******************************************************************************/
 
-#include "_VadcAutoScanDemo.h"
+#include "../../VadcAutoscanAsc/Demo_Illd/VadcAutoScanDemo.h"
 
 #include <stdio.h>
 #include <Cpu/Std/IfxCpu.h>
@@ -47,12 +47,14 @@
 App_VadcAutoScan g_VadcAutoScan; /**< \brief Demo information */
 
 IfxVadc_Adc_Channel       adcChannel[4];
-
+boolean output_val;
 
 /******************************************************************************/
 /*-------------------------Function Prototypes--------------------------------*/
 /******************************************************************************/
-
+static void setOutputPin(Ifx_P *port, uint8 pin, boolean state);
+static void PortOutput_init(void);
+static void PortOutput_run(void);
 /******************************************************************************/
 /*------------------------Private Variables/Constants-------------------------*/
 /******************************************************************************/
@@ -65,6 +67,30 @@ IfxVadc_Adc_Channel       adcChannel[4];
  *
  * This function is called from main during initialization phase
  */
+
+static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
+{
+    if (state)
+    {
+        IfxPort_setPinState(port, pin, IfxPort_State_high);
+    }
+    else
+    {
+        IfxPort_setPinState(port, pin, IfxPort_State_low);
+    }
+}
+
+static void PortOutput_init(void)
+{
+	output_val = 0;
+    IfxPort_setPinMode(&MODULE_P33, 0, IfxPort_Mode_outputPushPullGeneral);
+}
+
+static void PortOutput_run(void)
+{
+	setOutputPin(&MODULE_P33, 0, output_val);
+}
+
 void VadcAutoScanDemo_init(void)
 {
     /* VADC Configuration */
@@ -81,11 +107,7 @@ void VadcAutoScanDemo_init(void)
     IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &g_VadcAutoScan.vadc);
 
     /* with group 0 */
-#if BOARD == APPLICATION_KIT_TC237
     adcGroupConfig.groupId = IfxVadc_GroupId_0;
-#elif BOARD == SHIELD_BUDDY
-    adcGroupConfig.groupId = IfxVadc_GroupId_1;
-#endif
 
     adcGroupConfig.master  = adcGroupConfig.groupId;
 
@@ -125,6 +147,8 @@ void VadcAutoScanDemo_init(void)
     /* start autoscan */
     IfxVadc_Adc_startScan(&g_VadcAutoScan.adcGroup);
 
+    /* port output */
+    PortOutput_init();
 }
 
 
@@ -135,6 +159,7 @@ void VadcAutoScanDemo_init(void)
 void VadcAutoScanDemo_run(void)
 {
 //    printf("VadcAutoScanDemo_run() called\n");
+	PortOutput_run();
 
     uint32                    chnIx;
 
