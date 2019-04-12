@@ -1,7 +1,7 @@
 ---
 title: Synchronized PWM.md
-author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)
-date: 2018-05-08
+author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com) / Jaehyun Park (chang8224@gmail.com)
+date: 2019-04-12
 ---
 
 # Synchronized PWM

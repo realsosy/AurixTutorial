@@ -1,15 +1,13 @@
 ---
+title: Where are you?
+author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com) / Jaehyun Park (chang8224@gmail.com)
+date: 2019-04-12
+---
 
-title: Where are you? author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)
+# Where Are You?
 
-date: 2018-05-08
-----------------
+## 시작하는 질문
 
-Where Are You?
-==============
-
-시작하는 질문
--------------
 
 -	모터의 속도를 측정하려면 무슨 센서를 써야하지? 속도센서라는 것이 있나? 당연히 있겠지! 자동차의 계기판에 차속과 엔진 rpm을 보여주는 부분이 있잖아? 그 원리를 사용하면 회전하는 모터의 속도도 알아 낼 수 있고, 달리는 차량의 속도도 알아낼 수 있을거야.
 

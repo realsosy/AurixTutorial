@@ -1,15 +1,13 @@
 ---
+title: Chronos ruler.md
+author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com) / Jaehyun Park (chang8224@gmail.com)
+date: 2019-04-12
+---
 
-title: Chronos ruler.md author: Chulhoon Jang (chulhoonjang@gmail.com) / Sujin Han (sujinhan0905@gmail.com)
+# Chronos ruler
 
-date: 2018-05-08
-----------------
+## 시작하는 질문
 
-Chronos ruler
-=============
-
-시작하는 질문
--------------
 
 -	Servo의 데이타시트를 찾아보니, on-time 값, 600 (즉, 1500 - 900) ~ 2400(1500 + 900) usec 범위로 디지탈 신호를 입력하여, Servo의 각도를 조정한다고 한다. 주기적으로 동작시켜야 하는데, 어떤 서브시스템으로 이 신호를 발생시키는 것이 좋을까?
 -	pulse 신호를 발생시키면서, 주기(주파수)와 도통시간(on-time)을 바꿀 수 있으면 Application Kit 보드 위에 있는 Beeper 도 사용할 수 있겠다. 원격으로 동작 시킬 때 소리로 나에게 상태를 알려주는 방법중에 하나로 활용할 수 있겠네!
