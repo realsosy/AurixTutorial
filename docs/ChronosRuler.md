@@ -231,6 +231,12 @@ void GtmTomServo_run(void)
 	IfxGtm_Tom_Timer_applyUpdate(&g_GtmTomTimer.drivers.timerOneMs);
 }
 ```
+- 위와 같이 GTM 설정을 마치면 아래 그림의 하얀색 박스 (P11.9)에서 PWM 신호를 출력하게 됩니다. 이 신호를 활용하여 servo motor를 다음 그림과 같이 연결하고 제어해보도록 합니다.
+	- 하얀색 선: PWM 신호
+	- 검정색 선: Ground
+	- 빨간색 선: servo motor 전원 (3.3V)
+
+![Chronous_ruler_servo_connect](images/Chronous_ruler_servo_connect.png)
 
 ![ChronosRuler_GtmTomServo_Scope10m2m](images/ChronosRuler_GtmTomServo_Scope10m2m.png)
 

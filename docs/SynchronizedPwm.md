@@ -300,9 +300,11 @@ void GtmTomPwmHl_run(void)
 
 }
 ```
+-	위와 같이 GTM 설정을 마치게 되면 아래 그림과 같이 빨간색 박스(P10.3, P10.5)와 노란색 박스(P33.0, P33.1)에서 총 4개의 PWM을 출력하게 됩니다.
+
+![PWM_port](images/PWM_port.png)
 
 ![SPwm_GtmTomPwmHl_Scope_100us](images/SPwm_GtmTomPwmHl_Scope_100us.png)
-
 추가적인 설명
 -------------
 
