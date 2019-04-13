@@ -242,16 +242,20 @@ return 0;
 
 ### In AurixRacer; TestVadcBgScan
 
-* 각 보드에서 사용할 Analog source는 다음과 같다
-  * TC237: AN15, 16, 20, 21
-  * TC275: AN44, 45, 46, 47
-- 각 Board에는 이 source에 맞는 pin과 converter가 맵핑되어있다.
+* 각 보드에서 사용할 그룹과 채널은 다음과 같다
+  * TC237: Group1의 채널 0, 1, 2, 3
+  * TC275: Group5의 채널 0, 1, 2, 3
+- 각 Board에는 이 source에 맞는 pin이 맵핑되어있다.
   * TC237
     - 메뉴얼을 통해 확인
     ![MultiChannelVoltmeter_Pin_237](images/MultiChannelVoltmeter_Pin_237.png)
 
   * TC275
-    - 각각  DAC0, DAC1, CAN RX, CAN TX 핀을 이용
+    - Group 5의 채널 0 - DAC0
+    - Group 5의 채널 1 - DAC1
+    - Group 5의 채널 2 - CAN RX
+    - Group 5의 채널 3 - CAN TX
+    - 보드에서 이 핀들의 위치는 아래와 같다.
     ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
 
 * Channel configuration 초기화 때 이 설정값을 입력
