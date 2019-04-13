@@ -28,7 +28,7 @@
 #include "Cpu0_Main.h"
 
 #include "AsclinAscDemo.h"
-#include "VadcAutoScanDemo.h"
+#include "VadcAutoAscDemo.h"
 #include "SysSe/Bsp/Bsp.h"
 
 /******************************************************************************/
