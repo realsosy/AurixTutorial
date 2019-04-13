@@ -448,11 +448,9 @@ void VadcAutoScanDemo_init(void)
     // 중간생략
 
     // 그룹 설정
-#if BOARD == APPLICATION_KIT_TC237
+
     adcGroupConfig.groupId = IfxVadc_GroupId_0; // 237의 경우 Group0
-#elif BOARD == SHIELD_BUDDY
-    adcGroupConfig.groupId = IfxVadc_GroupId_1; // 275의 경우 Group1
-#endif
+
 
     // 중간생략
 
@@ -496,7 +494,7 @@ void VadcAutoScanDemo_run(void)
 
   * TC275
     - 아래 그림과 같이 AN10, AN11 채널을 이용
-    
+
     ![MyOwnCheapOsilloscope_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
 
 
