@@ -496,7 +496,8 @@ void VadcAutoScanDemo_run(void)
     - Group 0의 채널 0 - Analog input 10
     - Group 0의 채널 1 - Analog input 11
     - 보드에서 이 핀들의 위치는 아래와 같다.
-    ![MyOwnCheapOsilloscope_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
+
+![MyOwnCheapOsilloscope_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
 
 
 #### Module Behavior

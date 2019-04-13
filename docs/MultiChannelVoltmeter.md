@@ -256,7 +256,8 @@ return 0;
     - Group 5의 채널 2 - CAN RX
     - Group 5의 채널 3 - CAN TX
     - 보드에서 이 핀들의 위치는 아래와 같다.
-    ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
+    
+![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
 
 * Channel configuration 초기화 때 이 설정값을 입력
 
