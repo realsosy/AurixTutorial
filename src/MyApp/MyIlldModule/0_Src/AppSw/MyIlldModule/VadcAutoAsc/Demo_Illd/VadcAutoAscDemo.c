@@ -25,7 +25,7 @@
 /*----------------------------------Includes----------------------------------*/
 /******************************************************************************/
 
-#include "../../VadcAutoscanAsc/Demo_Illd/VadcAutoScanDemo.h"
+#include "VadcAutoAscDemo.h"
 
 #include <stdio.h>
 #include <Cpu/Std/IfxCpu.h>
