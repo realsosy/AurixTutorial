@@ -175,7 +175,17 @@ void VadcBackgroundScanDemo_init(void)
     }
 
 ```
+* Group0의 채널0과 1을 사용하기로 하였으므로 설정에 맞는 포트와 핀을 찾아보면
+  * TC237
+  
+![MultiChannelVoltmeter_Pin_237](images/MyOwnCheapOsilloscope_Pin_237.PNG)
 
+  * TC275
+    - Group 0의 채널 0 - Analog input 10
+    - Group 0의 채널 1 - Analog input 11
+    - 보드에서 이 핀들의 위치는 아래와 같다.
+
+![MultiChannelVoltmeter_Pin_275](images/MyOwnCheapOsilloscope_Pin_275.PNG)
 
 
 ### Interrupt Configuration
@@ -238,6 +248,7 @@ return 0;
 
 
 
+
 ## 추가적인 설명
 
 ### In AurixRacer; TestVadcBgScan
@@ -256,7 +267,7 @@ return 0;
     - Group 5의 채널 2 - CAN RX
     - Group 5의 채널 3 - CAN TX
     - 보드에서 이 핀들의 위치는 아래와 같다.
-    
+
 ![MultiChannelVoltmeter_Pin_275](images/MultiChannelVoltmeter_Pin_275.PNG)
 
 * Channel configuration 초기화 때 이 설정값을 입력
