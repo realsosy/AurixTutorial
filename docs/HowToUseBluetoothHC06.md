@@ -2,8 +2,8 @@
 
 ## Objectives
 
-- HC-06의 보드레이트 설정을 **9600**에서 **115200**으로 변경한다.
-- 페어링시 사용되는 HC-06의 **장치 이름(Device Name)**과 **핀  코드(Pincode)**를 변경한다.
+- HC-06의 보드레이트 설정을 *9600*에서 *115200*으로 변경한다.
+- 페어링시 사용되는 HC-06의 *장치 이름(Device Name)*과 *핀  코드(Pincode)*를 변경한다.
 
 ## References
 
@@ -52,7 +52,7 @@
 
   - 핀 코드 설정
 
-    ![HowToUseBluetooth_AsclinAscBtDemo_run_PinSet](images\HowToUseBluetooth_AsclinAscBtDemo_run_PinSet.png)
+    ![HowToUseBluetooth_AsclinAscBtDemo_run_PinSet](./images/HowToUseBluetooth_AsclinAscBtDemo_run_PinSet.png)
 
     - 페어링시 필요한 핀 코드를 설정하는 명령어다.
     - 만약 장치의 핀을 **"0000"**으로 변경을 할 경우 "AT+PIN**6802**"를 "AT+PIN**0000**"으로 수정하면 된다.
