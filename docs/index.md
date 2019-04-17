@@ -25,6 +25,7 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 
 **[NOTE]**
 
+* [Bluetooth HC06 모듈을 Aurix를 활용하여 설정](./HowToUseBluetoothHC06.md)하는 코드와 설명을 추가하였습니다.
 * /src 에 있는 프로젝트들은 다운로드 받으셔서 사용하셔도 됩니다.  사소한 오류는 있을 것으로 예상됩니다만 참고용으로 사용할 수 있을 수준의 코드입니다.
 * /docs 와 /references 에 있는 파일들은 인터넷을 사용하여 접근하시기 바랍니다. 수시로 지속적인 변경이 발생할 수 있으므로 다운로드 받지 마시고 browser나 git 을 통해서 접근하시기를 바랍니다.
 * [ReadTheDocs](http://aurixtutorial.readthedocs.io/ko/latest/)에서 좀 더 편하게 보실 수 있습니다.
@@ -56,19 +57,20 @@ Software Platform를 분석하면 자연스럽게 Infineon AURIX를 이해할 �
 * **How to stduy AURIX** 부터 **Twinkle twinkle little start** 까지는 순서대로 보셔야 합니다.  그 이후는 독립적으로 구성되어 있어서 순서에 관계없이 관심있는 챕터를 보시면 됩니다.
 
 1.  [How to study AURIX?](./HowToStudyAurix.md) MCU 학습 방법 제안
-3.  [What is iLLD?](./WhatIsIlld.md) PORT
-4.  [Do ma a favor?](./DoMeAFavor.md) Config, Init, ISR in iLLD
-5.  [Twinkle twinkle little star](./TwinkleTwinkleLittleStar.md)  STM
-6.  [Multiple infinite loops](./MultipleInfiniteLoops.md) Static Cyclic Scheduler
-7.  [Hello world](./HelloWorld.md)  ASC & Terminal
-8.  [My own terminal](./MyOwnTerminal.md) Shell
-9.  [Multi channel voltmeter](./MultiChannelVoltmeter.md)  Vadc Background Scan
-10.  [My own cheap oscilloscope](./MyOwnCheapOscilloscope.md)  Vadc Auto Scan + Serial Plot
-11.  [Line Scan Camera](./LineScanCamera.md) TSL1401
-12.  [Chronos ruler](./ChronosRuler.md) GtmTomTimer + Beeper, Servo
-13.  [Synchronized PWM](./SynchronizedPwm.md) GtmTomPwmHl + H-Bridge
-14.  [Where are you?](./WhereAreYou.md) Gpt12 + Encoder
-15.  [TFT as modern Man-Machine Interface(AK_TC23A Only)](./TftAsModernMmi.md)
+2.  [What is iLLD?](./WhatIsIlld.md) PORT
+3.  [Do ma a favor?](./DoMeAFavor.md) Config, Init, ISR in iLLD
+4.  [Twinkle twinkle little star](./TwinkleTwinkleLittleStar.md)  STM
+5.  [Multiple infinite loops](./MultipleInfiniteLoops.md) Static Cyclic Scheduler
+6.  [Hello world](./HelloWorld.md)  ASC & Terminal
+7.  [My own terminal](./MyOwnTerminal.md) Shell
+8.  [Multi channel voltmeter](./MultiChannelVoltmeter.md)  Vadc Background Scan
+9.  [My own cheap oscilloscope](./MyOwnCheapOscilloscope.md)  Vadc Auto Scan + Serial Plot
+10.  [Line Scan Camera](./LineScanCamera.md) TSL1401
+11.  [Chronos ruler](./ChronosRuler.md) GtmTomTimer + Beeper, Servo
+12.  [Synchronized PWM](./SynchronizedPwm.md) GtmTomPwmHl + H-Bridge
+13.  [Where are you?](./WhereAreYou.md) Gpt12 + Encoder
+14.  [TFT as modern Man-Machine Interface(AK_TC23A Only)](./TftAsModernMmi.md)
+15.  [How to use Bluetooth HC06 in Aurix](./HowToUseBluetoothHC06.md)
 
 
 
