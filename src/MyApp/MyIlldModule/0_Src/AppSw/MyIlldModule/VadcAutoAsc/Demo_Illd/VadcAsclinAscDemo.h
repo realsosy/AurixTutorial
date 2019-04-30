@@ -26,8 +26,8 @@
  * \ingroup IfxLld_Demo_AsclinAsc_SrcDoc_Main
  */
 
-#ifndef ASCLINASCDEMO_H
-#define ASCLINASCDEMO_H 1
+#ifndef VADCASCLINASCDEMO_H
+#define VADCASCLINASCDEMO_H 1
 
 /******************************************************************************/
 /*----------------------------------Includes----------------------------------*/
