@@ -17,7 +17,8 @@ pages:
     - Chronos ruler: ChronosRuler.md
     - Synchronized PWM: SynchronizedPwm.md
     - Where are you?: WhereAreYou.md
-    - TFT as modern Man-Machine Interface (AK_TC23A only): TftAsModernMmi.md 
+    - TFT as modern Man-Machine Interface (AK_TC23A only): TftAsModernMmi.md
+    - How to use Bluetooth HC06 in Aurix: HowToUseBluetoothHC06.md
 #    - Simulink as a programming language: SimulinkAsAProgrammingLanguage.md
 #    - OSEK-Certified ErikaOS & RT-Druid: OsekCertificedErikaOsRtDruid.md
 
