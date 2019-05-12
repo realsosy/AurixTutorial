@@ -14,6 +14,10 @@
 
 ![HowToUseBluetooth_ConnectionBt2Tc275](./images/HowToUseBluetooth_ConnectionBt2Tc275.png)
 
+## 핀 위치
+
+![HowToUseBluetooth_Pin_SB_TC275](./images/HowToUseBluetooth_Pin_SB_TC275.png)
+
 ## HC-06 설정 변경
 
 
@@ -92,7 +96,7 @@
 - **보드레이트 변경 실패**
 
   - **Simulated I/O**창에서 아래와 같이 나타난다.
-  - Fail은 보통 HC-06과 TC275보드의 보드레이트가 안 맞거나, 데이터 전송 중에 문제가 생겨서 일어나기 때문이다. 
+  - Fail은 보통 HC-06과 TC275보드의 보드레이트가 안 맞거나, 데이터 전송 중에 문제가 생겨서 일어나기 때문이다.
   - 이경우 프로그램을 다시 실행해 보거나, HC-06과 TC275보드의 보드레이트를 확인한다.
 
   ![HowToUseBluetooth_InitBtFail](./images/HowToUseBluetooth_InitBtFail.png)
