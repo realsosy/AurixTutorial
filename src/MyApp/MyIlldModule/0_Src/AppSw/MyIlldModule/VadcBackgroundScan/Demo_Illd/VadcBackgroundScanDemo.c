@@ -86,12 +86,14 @@ static void setOutputPin(Ifx_P *port, uint8 pin, boolean state)
 static void PortOutput_init(void)
 {
 	output_val = 0;
-    IfxPort_setPinMode(&MODULE_P33, 0, IfxPort_Mode_outputPushPullGeneral);
+    //IfxPort_setPinMode(&MODULE_P33, 6, IfxPort_Mode_outputPushPullGeneral);
+	IfxPort_setPinMode(&MODULE_P23, 4, IfxPort_Mode_inputNoPullDevice);
+	IfxPort_setPinMode(&MODULE_P23, 5, IfxPort_Mode_inputNoPullDevice);
 }
 
 static void PortOutput_run(void)
 {
-	setOutputPin(&MODULE_P33, 0, output_val);
+	//setOutputPin(&MODULE_P33, 6, output_val);
 }
 
 
@@ -174,7 +176,7 @@ void VadcBackgroundScanDemo_init(void)
 void VadcBackgroundScanDemo_run(void)
 {
 	PortOutput_run();
-//    printf("VadcBackgroundScanDemo_run() called\n");
+    printf("VadcBackgroundScanDemo_run() called\n");
 
 	uint32                    chnIx;
 
