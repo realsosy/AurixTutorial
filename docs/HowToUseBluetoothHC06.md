@@ -27,7 +27,7 @@
 
 
 
-- Project explorer창에서 **0_Src >> AppSw >> MyllldModule >> AsclinAscBt >> Demo_lld** 안에 있는 **AsclinAscBtDemo.c**를 연다.
+- Project explorer창에서 **0_Src >> AppSw >> MyllldModule >> AsclinBt >> Demo_lld** 안에 있는 **AsclinAscBtDemo.c**를 연다.
 
    ![HowToUseBluetooth_OpenAsclinAscBtDemoPc](./images/HowToUseBluetooth_OpenAsclinAscBtDemoPc.png)
 
